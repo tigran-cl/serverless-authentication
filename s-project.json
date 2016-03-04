@@ -1,0 +1,10 @@
+{
+  "name": "serverless-authentication",
+  "version": "0.0.1",
+  "profile": "serverless-v0.4.2",
+  "location": "https://github.com/...",
+  "author": "",
+  "description": "Oauth authentication for Serverless",
+  "custom": {},
+  "plugins": []
+}

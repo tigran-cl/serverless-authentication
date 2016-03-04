@@ -1,0 +1,6 @@
+{
+  "project": "serverless-authentication",
+  "projectBucket": "serverless.eu-west-1.serverless-authentication",
+  "domain": "serverless-authentication",
+  "notificationEmail": "eetu.tuomala@sc5.io"
+}

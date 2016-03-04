@@ -1,0 +1,17 @@
+{
+  "secret": "secret",
+  "facebook": {
+    "id": "FB_APP_ID",
+    "secret": "FB_APP_SECRET"
+  },
+  "google": {
+    "id": "GOOGLE_APP_ID",
+    "secret": "GOOGLE_APP_SECRET"
+  },
+  "twitter": {
+    "id": "TWITTER_API_CONSUMER_KEY",
+    "secret": "TWITTER_API_CONSUMER_SECRET"
+  },
+  "callback": "https://in39mo4h10.execute-api.eu-west-1.amazonaws.com/dev/callback/{provider}",
+  "redirect": "http://localhost:3000/"
+}

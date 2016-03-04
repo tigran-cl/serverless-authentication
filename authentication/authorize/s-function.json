@@ -1,0 +1,14 @@
+{
+  "name": "authorize",
+  "customName": false,
+  "customRole": false,
+  "handler": "authorize/handler.handler",
+  "timeout": 6,
+  "memorySize": 1024,
+  "custom": {
+    "excludePatterns": [],
+    "envVars": []
+  },
+  "endpoints": [],
+  "events": []
+}
