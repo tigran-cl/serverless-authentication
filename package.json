@@ -9,9 +9,13 @@
   },
   "scripts": {
     "compile": "babel -d lib/ src/",
-    "prepublish": "npm run compile"
+    "prepublish": "npm run compile",
+    "build-example": "npm run compile && cp -R lib example/authentication && cd example/authentication && sls function deploy"
   },
   "dependencies": {
-    "lodash": "^4.6.1"
+    "lodash": "^4.6.0",
+    "async": "^1.5.2",
+    "jsonwebtoken": "^5.7.0",
+    "serverless-helpers-js": "~0.1.0"
   }
 }

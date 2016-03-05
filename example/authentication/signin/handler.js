@@ -7,9 +7,9 @@ var ServerlessHelpers = require('serverless-helpers-js').loadEnv();
 var config = require('../config');
 
 // Providers
-var facebook = require('../providers/facebook');
-var google = require('../providers/google');
-var twitter = require('../providers/twitter');
+var facebook = require('../lib/providers/facebook');
+var google = require('../lib/providers/google');
+var twitter = require('../lib/providers/twitter');
 
 module.exports.handler = function(event, context) {
   if (event.provider === 'facebook') {

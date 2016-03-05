@@ -2,7 +2,7 @@
 
 var https = require('https');
 var async = require('async');
-var utils = require('../lib/utils');
+var utils = require('../utils');
 
 // not yet working
 

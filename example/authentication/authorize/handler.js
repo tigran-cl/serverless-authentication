@@ -26,7 +26,7 @@ var generatePolicy = function(principalId, effect, resource) {
 };
 
 module.exports.handler = function(event, context) {
-  var data = utils.readToken(event.authorizationToken);
+  var data = utils.readToken(event.authorizationToken, config);
   
   // Check that token is valid
   

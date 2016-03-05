@@ -2,13 +2,13 @@
 
 var https = require('https');
 var async = require('async');
-var utils = require('../lib/utils');
+var utils = require('../utils');
 
 module.exports = {
   signin: function(event, config, callback) {
     var params = {
       client_id: config.google.id,
-      redirect_uri: utils.redirectUrlBuilder(event),
+      redirect_uri: utils.redirectUrlBuilder(event, config),
       response_type: 'code',
       scope: 'profile'
     };
