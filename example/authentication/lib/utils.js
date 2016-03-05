@@ -2,7 +2,6 @@ var _ = require('lodash');
 var jwt = require('jsonwebtoken');
 var config = require('../config');
 
-
 function redirectUrlBuilder(event) {
   return config.callback.replace('{provider}', event.provider);
 }
