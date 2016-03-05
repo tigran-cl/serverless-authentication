@@ -9,8 +9,7 @@
   },
   "scripts": {
     "compile": "babel -d lib/ src/",
-    "prepublish": "npm run compile",
-    "build-test": "npm run compile && node lib/index.js"
+    "prepublish": "npm run compile"
   },
   "dependencies": {
     "lodash": "^4.6.1"
