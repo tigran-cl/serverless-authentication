@@ -5,7 +5,12 @@ import _ from 'lodash';
 import https from 'https';
 import http from 'http';
 
-export default class Request {
+export default function request({url, method, params}, callback) {
+  let req = new Request({url, method, params});
+  req.make(callback);
+}
+
+class Request {
   constructor({url, method = 'GET', params = {}}){
     this.options = parse(url);
     let port = this.options.protocol == 'https:' ? 443 : 80;

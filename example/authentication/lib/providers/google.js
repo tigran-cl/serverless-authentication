@@ -40,9 +40,8 @@ function callback(event, config, callback) {
     grant_type: 'authorization_code'
   };
   _async2.default.waterfall([function (callback) {
-    new _request2.default({ url: 'https://www.googleapis.com/oauth2/v4/token', params: params, method: 'POST' }).make(callback);
+    (0, _request2.default)({ url: 'https://www.googleapis.com/oauth2/v4/token', params: params, method: 'POST' }, callback);
   }, function (data, callback) {
-
     var p = {
       url: 'https://www.googleapis.com/plus/v1/people/me',
       params: {
@@ -50,7 +49,7 @@ function callback(event, config, callback) {
         access_token: data.access_token
       }
     };
-    new _request2.default(p).make(function (err, res) {
+    (0, _request2.default)(p, function (err, res) {
       var result = data;
       result.client_id = res.id;
       callback(null, result);

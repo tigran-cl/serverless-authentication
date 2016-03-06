@@ -37,7 +37,7 @@ function callback(event, config, callback) {
     code: event.code
   };
   _async2.default.waterfall([function (callback) {
-    new _request2.default({ url: 'https://graph.facebook.com/v2.3/oauth/access_token', params: params }).make(callback);
+    (0, _request2.default)({ url: 'https://graph.facebook.com/v2.3/oauth/access_token', params: params }, callback);
   }, function (data, callback) {
     var p = {
       url: 'https://graph.facebook.com/me',
@@ -46,7 +46,7 @@ function callback(event, config, callback) {
         access_token: data.access_token
       }
     };
-    new _request2.default(p).make(function (err, res) {
+    (0, _request2.default)(p, function (err, res) {
       var result = data;
       result.client_id = res.id;
       callback(null, result);

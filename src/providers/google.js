@@ -2,7 +2,7 @@
 
 import Utils from '../utils';
 import async from 'async';
-import Request from '../request';
+import request from '../request';
 
 export function signin(event, config, callback) {
   let params = {
@@ -25,10 +25,9 @@ export function callback(event, config, callback) {
   };
   async.waterfall([
     (callback) => {
-      (new Request({url: 'https://www.googleapis.com/oauth2/v4/token', params, method: 'POST'})).make(callback);
+      request({url: 'https://www.googleapis.com/oauth2/v4/token', params, method: 'POST'}, callback);
     },
     (data, callback) => {
-
       let p = {
         url: 'https://www.googleapis.com/plus/v1/people/me',
         params: {
@@ -36,7 +35,7 @@ export function callback(event, config, callback) {
           access_token: data.access_token
         }
       };
-      (new Request(p)).make((err, res) => {
+      request(p, (err, res) => {
         let result = data;
         result.client_id = res.id;
         callback(null, result);

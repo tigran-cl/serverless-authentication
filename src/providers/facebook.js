@@ -2,7 +2,7 @@
 
 import Utils from '../utils';
 import async from 'async';
-import Request from '../request';
+import request from '../request';
 
 export function signin(event, config, callback) {
   let params = {
@@ -22,7 +22,7 @@ export function callback(event, config, callback) {
   };
   async.waterfall([
     (callback) => {
-      (new Request({url: 'https://graph.facebook.com/v2.3/oauth/access_token', params})).make(callback);
+      request({url: 'https://graph.facebook.com/v2.3/oauth/access_token', params}, callback);
     },
     (data, callback) => {
       let p = {
@@ -32,7 +32,7 @@ export function callback(event, config, callback) {
           access_token: data.access_token
         }
       };
-      (new Request(p)).make((err, res) => {
+      request(p, (err, res) => {
         var result = data;
         result.client_id = res.id;
         callback(null, result);
