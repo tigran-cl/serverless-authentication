@@ -4,6 +4,7 @@ import {parse} from 'url';
 import _ from 'lodash';
 import https from 'https';
 import http from 'http';
+import querystring from 'querystring';
 
 export default function request({url, method, params}, callback) {
   let req = new Request({url, method, params});
@@ -15,8 +16,17 @@ class Request {
     this.options = parse(url);
     let port = this.options.protocol == 'https:' ? 443 : 80;
     let path = this.options.path;
-    if(!_.isEmpty(params)){
-      path += '?' + urlParams(params)
+    if(!_.isEmpty(params)) {
+      if(method === 'GET') {
+        path += '?' + urlParams(params)
+      }
+      if(method === 'POST') {
+        this.options.postData = querystring.stringify(params);
+        this.options.headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': this.options.postData.length
+        }
+      }
     }
     _.assign(this.options, {port, method, params, path});
   }
@@ -31,6 +41,9 @@ class Request {
         }
       });
     });
+    if(this.options.postData) {
+      req.write(this.options.postData);
+    }
     req.end();
     req.on('error', (e) => {
       if(callback) {

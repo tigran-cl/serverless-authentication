@@ -22,6 +22,10 @@ var _http = require('http');
 
 var _http2 = _interopRequireDefault(_http);
 
+var _querystring = require('querystring');
+
+var _querystring2 = _interopRequireDefault(_querystring);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -49,7 +53,17 @@ var Request = function () {
     var port = this.options.protocol == 'https:' ? 443 : 80;
     var path = this.options.path;
     if (!_lodash2.default.isEmpty(params)) {
-      path += '?' + urlParams(params);
+      if (method === 'GET') {
+        path += '?' + urlParams(params);
+      }
+
+      if (method === 'POST') {
+        this.options.postData = _querystring2.default.stringify(params);
+        this.options.headers = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': this.options.postData.length
+        };
+      }
     }
     _lodash2.default.assign(this.options, { port: port, method: method, params: params, path: path });
   }
@@ -68,6 +82,9 @@ var Request = function () {
           }
         });
       });
+      if (this.options.postData) {
+        req.write(this.options.postData);
+      }
       req.end();
       req.on('error', function (e) {
         if (callback) {

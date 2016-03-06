@@ -3,8 +3,8 @@
   "customName": false,
   "customRole": false,
   "handler": "callback/handler.handler",
-  "timeout": 6,
-  "memorySize": 1024,
+  "timeout": 30,
+  "memorySize": 512,
   "custom": {
     "excludePatterns": [],
     "envVars": []

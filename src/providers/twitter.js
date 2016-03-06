@@ -1,13 +1,28 @@
 'use strict';
 
-var https = require('https');
-var async = require('async');
-var utils = require('../utils');
+import Utils from '../utils';
+import async from 'async';
+import request from '../request';
 
 // not yet working
 
-module.exports = {
-  signin: function(event, config, callback) {
+export function signin(event, config, callback) {
+  //let params = {
+  //  consumerKey: config.twitter.id,
+  //  consumerSecret: config.twitter.secret,
+  //  redirect_uri: Utils.redirectUrlBuilder(event, config)
+  //};
+  //let url = Utils.urlBuilder('https://api.twitter.com/oauth/request_token', params);
+  //callback(null, {url: url})
+  callback('Not implemented');
+}
+
+export function callback(event, config, callback) {
+  callback('Not implemented');
+}
+
+//module.exports = {
+//  signin: function(event, config, callback) {
     // var params = {
     //   consumerKey: config.twitter.id,
     //   consumerSecret: config.twitter.secret,
@@ -15,9 +30,9 @@ module.exports = {
     // };
     // var url = utils.urlBuilder('https://api.twitter.com/oauth/authenticate', params);
     // callback(null, {url: url})
-    callback('Not implemented');
-  },
-  callback: function(event, config, callback) {
+  //  callback('Not implemented');
+  //},
+  //callback: function(event, config, callback) {
     //  var params = {
     //   consumerKey: config.twitter.id,
     //   callbackURL: utils.redirectUrlBuilder(event),
@@ -55,6 +70,6 @@ module.exports = {
     // ], function (err, data) {
     //   callback(err, {url: utils.urlBuilder(config.redirect, {token: utils.createToken(data.client_id), client_id: data.client_id})});
     // });
-    callback('Not implemented');
-  }
-};
+//    callback('Not implemented');
+//  }
+//};
