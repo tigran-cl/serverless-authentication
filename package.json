@@ -10,7 +10,8 @@
   "scripts": {
     "compile": "babel -d lib/ src/",
     "prepublish": "npm run compile",
-    "build-example": "npm run compile && cp -R lib example/authentication && cd example/authentication && sls function deploy"
+    "build-example": "npm run compile && cp -R lib example/authentication",
+    "publish-example": "npm run build-example && cd example/authentication && sls function deploy"
   },
   "dependencies": {
     "lodash": "^4.6.0",
