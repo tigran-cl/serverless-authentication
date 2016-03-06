@@ -56,7 +56,6 @@ var Request = function () {
       if (method === 'GET') {
         path += '?' + urlParams(params);
       }
-
       if (method === 'POST') {
         this.options.postData = _querystring2.default.stringify(params);
         this.options.headers = {
