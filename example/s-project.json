@@ -6,5 +6,7 @@
   "author": "",
   "description": "Oauth authentication for Serverless",
   "custom": {},
-  "plugins": []
+  "plugins": [
+    "serverless-cors-plugin"
+  ]
 }
