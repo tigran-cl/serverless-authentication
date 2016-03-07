@@ -26,6 +26,10 @@ var _querystring = require('querystring');
 
 var _querystring2 = _interopRequireDefault(_querystring);
 
+var _utils = require('./utils');
+
+var _utils2 = _interopRequireDefault(_utils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -54,7 +58,7 @@ var Request = function () {
     var path = this.options.path;
     if (!_lodash2.default.isEmpty(params)) {
       if (method === 'GET') {
-        path += '?' + urlParams(params);
+        path += '?' + _utils2.default.urlParams(params);
       }
       if (method === 'POST') {
         this.options.postData = _querystring2.default.stringify(params);
@@ -116,10 +120,3 @@ var Request = function () {
 
   return Request;
 }();
-
-function urlParams(params) {
-  var p = _lodash2.default.map(params, function (value, key) {
-    return key + '=' + value;
-  });
-  return p.join('&');
-}

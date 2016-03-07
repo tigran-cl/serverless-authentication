@@ -51,6 +51,7 @@ function callback(event, config, callback) {
     (0, _request2.default)(p, function (err, res) {
       var result = data;
       result.client_id = res.id;
+      var profile = new Profile(result);
       callback(null, result);
     });
   }], function (err, data) {

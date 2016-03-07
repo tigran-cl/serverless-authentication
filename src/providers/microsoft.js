@@ -37,6 +37,7 @@ export function callback(event, config, callback) {
       request(p, (err, res) => {
         var result = data;
         result.client_id = res.id;
+        let profile = new Profile(result);
         callback(null, result);
       });
     }

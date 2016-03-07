@@ -5,6 +5,7 @@ import _ from 'lodash';
 import https from 'https';
 import http from 'http';
 import querystring from 'querystring';
+import Utils from './utils';
 
 export default function request({url, method, params}, callback) {
   let req = new Request({url, method, params});
@@ -18,7 +19,7 @@ class Request {
     let path = this.options.path;
     if(!_.isEmpty(params)) {
       if(method === 'GET') {
-        path += '?' + urlParams(params)
+        path += '?' + Utils.urlParams(params)
       }
       if(method === 'POST') {
         this.options.postData = querystring.stringify(params);
@@ -72,11 +73,4 @@ class Request {
       });
     });*/
   }
-}
-
-function urlParams(params) {
-  let p = _.map(params, (value, key) => {
-    return key+'='+value
-  });
-  return p.join('&');
 }
