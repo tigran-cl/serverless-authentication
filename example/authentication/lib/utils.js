@@ -6,10 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _jsonwebtoken = require('jsonwebtoken');
 
 var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
@@ -36,10 +32,11 @@ var Utils = function () {
   }, {
     key: 'urlParams',
     value: function urlParams(params) {
-      var p = _lodash2.default.map(params, function (value, key) {
-        return key + '=' + value;
-      });
-      return p.join('&');
+      var result = [];
+      for (var key in params) {
+        result.push(key + '=' + params[key]);
+      }
+      return result.join('&');
     }
   }, {
     key: 'createToken',

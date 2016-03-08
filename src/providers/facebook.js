@@ -12,29 +12,26 @@ export function signin(event, config, callback) {
     scope: 'email'
   };
   let url = Utils.urlBuilder('https://www.facebook.com/dialog/oauth', params);
-  callback(null, {url: url})
+  callback(null, {url: url});
 }
 
 export function callback(event, config, callback) {
-  let params = {
-    client_id: config.facebook.id,
-    redirect_uri: Utils.redirectUrlBuilder(event, config),
-    client_secret: config.facebook.secret,
-    code: event.code
-  };
   async.waterfall([
     (callback) => {
+      let params = {
+        client_id: config.facebook.id,
+        redirect_uri: Utils.redirectUrlBuilder(event, config),
+        client_secret: config.facebook.secret,
+        code: event.code
+      };
       request({url: 'https://graph.facebook.com/v2.3/oauth/access_token', params}, callback);
     },
     (data, callback) => {
-      let p = {
-        url: 'https://graph.facebook.com/me',
-        params: {
-          fields: 'id,name,picture,email',
-          access_token: data.access_token
-        }
+      let params = {
+        fields: 'id,name,picture,email',
+        access_token: data.access_token
       };
-      request(p, (err, response) => {
+      request({url: 'https://graph.facebook.com/me', params}, (err, response) => {
         if(!err) {
           callback(null, responseToProfile(response));
         } else {

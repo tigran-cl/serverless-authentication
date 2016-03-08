@@ -1,7 +1,6 @@
 'use strict';
 
 import {parse} from 'url';
-import _ from 'lodash';
 import https from 'https';
 import http from 'http';
 import querystring from 'querystring';
@@ -13,26 +12,28 @@ export default function request({url, method, params}, callback) {
 }
 
 class Request {
-  constructor({url, method = 'GET', params = {}}){
+  constructor({url, method = 'GET', params={}}) {
     this.options = parse(url);
     let port = this.options.protocol == 'https:' ? 443 : 80;
     let path = this.options.path;
-    if(!_.isEmpty(params)) {
-      if(method === 'GET') {
-        path += '?' + Utils.urlParams(params)
-      }
-      if(method === 'POST') {
-        this.options.postData = querystring.stringify(params);
-        this.options.headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': this.options.postData.length
-        }
+    if(method === 'GET') {
+      path += '?' + Utils.urlParams(params);
+    }
+    if(method === 'POST') {
+      this.options.postData = querystring.stringify(params);
+      this.options.headers = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': this.options.postData.length
       }
     }
-    _.assign(this.options, {port, method, params, path});
+    //Object.assign(this.options, {port, method, params, path});
+    this.options.port = port;
+    this.options.method = method;
+    this.options.params = params;
+    this.options.path = path;
   }
 
-  make (callback = null) {
+  make(callback = null) {
     let s = this.options.protocol == 'https:' ? https : http;
     let req = s.request(this.options, (res) => {
       res.on('data', (d) => {

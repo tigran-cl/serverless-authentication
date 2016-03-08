@@ -35,23 +35,20 @@ function signin(event, config, callback) {
 }
 
 function callback(event, config, callback) {
-  var params = {
-    client_id: config.facebook.id,
-    redirect_uri: _utils2.default.redirectUrlBuilder(event, config),
-    client_secret: config.facebook.secret,
-    code: event.code
-  };
   _async2.default.waterfall([function (callback) {
+    var params = {
+      client_id: config.facebook.id,
+      redirect_uri: _utils2.default.redirectUrlBuilder(event, config),
+      client_secret: config.facebook.secret,
+      code: event.code
+    };
     (0, _request2.default)({ url: 'https://graph.facebook.com/v2.3/oauth/access_token', params: params }, callback);
   }, function (data, callback) {
-    var p = {
-      url: 'https://graph.facebook.com/me',
-      params: {
-        fields: 'id,name,picture,email',
-        access_token: data.access_token
-      }
+    var params = {
+      fields: 'id,name,picture,email',
+      access_token: data.access_token
     };
-    (0, _request2.default)(p, function (err, response) {
+    (0, _request2.default)({ url: 'https://graph.facebook.com/me', params: params }, function (err, response) {
       if (!err) {
         callback(null, responseToProfile(response));
       } else {

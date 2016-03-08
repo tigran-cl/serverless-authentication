@@ -13,31 +13,27 @@ export function signin(event, config, callback) {
     response_type: 'code'
   };
   let url = Utils.urlBuilder('https://login.live.com/oauth20_authorize.srf', params);
-  callback(null, {url: url})
+  callback(null, {url: url});
 }
 
 export function callback(event, config, callback) {
-  let params = {
-    client_id: config.microsoft.id,
-    redirect_uri: Utils.redirectUrlBuilder(event, config),
-    client_secret: config.microsoft.secret,
-    code: event.code,
-    grant_type: 'authorization_code'
-  };
   async.waterfall([
     (callback) => {
+      let params = {
+        client_id: config.microsoft.id,
+        redirect_uri: Utils.redirectUrlBuilder(event, config),
+        client_secret: config.microsoft.secret,
+        code: event.code,
+        grant_type: 'authorization_code'
+      };
       request({url: 'https://login.live.com/oauth20_token.srf', params, method: 'POST'}, callback);
     },
     (data, callback) => {
-      let p = {
-        url: 'https://apis.live.net/v5.0/me',
-        params: {
-          access_token: data.access_token
-        }
+      let params = {
+        access_token: data.access_token
       };
-      request(p, (err, response) => {
+      request({url: 'https://apis.live.net/v5.0/me', params}, (err, response) => {
         if(!err) {
-          console.log(response);
           callback(null, responseToProfile(response));
         } else {
           callback(err);

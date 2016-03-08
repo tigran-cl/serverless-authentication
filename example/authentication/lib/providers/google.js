@@ -36,23 +36,20 @@ function signin(event, config, callback) {
 }
 
 function callback(event, config, callback) {
-  var params = {
-    client_id: config.google.id,
-    redirect_uri: _utils2.default.redirectUrlBuilder(event, config),
-    client_secret: config.google.secret,
-    code: event.code,
-    grant_type: 'authorization_code'
-  };
   _async2.default.waterfall([function (callback) {
+    var params = {
+      client_id: config.google.id,
+      redirect_uri: _utils2.default.redirectUrlBuilder(event, config),
+      client_secret: config.google.secret,
+      code: event.code,
+      grant_type: 'authorization_code'
+    };
     (0, _request2.default)({ url: 'https://www.googleapis.com/oauth2/v4/token', params: params, method: 'POST' }, callback);
   }, function (data, callback) {
-    var p = {
-      url: 'https://www.googleapis.com/plus/v1/people/me',
-      params: {
-        access_token: data.access_token
-      }
+    var params = {
+      access_token: data.access_token
     };
-    (0, _request2.default)(p, function (err, response) {
+    (0, _request2.default)({ url: 'https://www.googleapis.com/plus/v1/people/me', params: params }, function (err, response) {
       if (!err) {
         callback(null, responseToProfile(response));
       } else {

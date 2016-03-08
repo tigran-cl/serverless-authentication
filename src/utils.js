@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import jwt from 'jsonwebtoken';
 
 export default class Utils {
@@ -11,10 +10,11 @@ export default class Utils {
   }
 
   static urlParams(params) {
-    var p = _.map(params, function(value, key) {
-      return key+'='+value
-    });
-    return p.join('&');
+    let result = [];
+    for(let key in params) {
+      result.push(`${key}=${params[key]}`);
+    }
+    return result.join('&');
   }
 
   static createToken(client_id, config) {
