@@ -10,9 +10,9 @@ var Profile = function Profile(data) {
   _classCallCheck(this, Profile);
 
   this.id = data.id;
-  this.username = data.username;
-  this.displayName = data.displayName;
-  this.profileImageUrl = data.ProfileImageUrl;
+  this.name = data.name;
+  this.email = data.email;
+  this.picture = data.picture;
 };
 
 exports.default = Profile;

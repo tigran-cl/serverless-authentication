@@ -18,12 +18,17 @@ var _request = require('../request');
 
 var _request2 = _interopRequireDefault(_request);
 
+var _profile = require('../profile');
+
+var _profile2 = _interopRequireDefault(_profile);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function signin(event, config, callback) {
   var params = {
     client_id: config.facebook.id,
-    redirect_uri: _utils2.default.redirectUrlBuilder(event, config)
+    redirect_uri: _utils2.default.redirectUrlBuilder(event, config),
+    scope: 'email'
   };
   var url = _utils2.default.urlBuilder('https://www.facebook.com/dialog/oauth', params);
   callback(null, { url: url });
@@ -42,16 +47,28 @@ function callback(event, config, callback) {
     var p = {
       url: 'https://graph.facebook.com/me',
       params: {
-        fields: 'id',
+        fields: 'id,name,picture,email',
         access_token: data.access_token
       }
     };
-    (0, _request2.default)(p, function (err, res) {
+    (0, _request2.default)(p, function (err, response) {
       var result = data;
-      result.client_id = res.id;
-      callback(null, result);
+      result.client_id = response.id;
+
+      var profile = responseToProfile(response);
+
+      callback(null, profile);
     });
   }], function (err, data) {
-    callback(err, { url: _utils2.default.urlBuilder(config.redirect, { client_id: data.client_id, token: _utils2.default.createToken(data.client_id, config) }) });
+    callback(err, data);
+  });
+}
+
+function responseToProfile(response) {
+  return new _profile2.default({
+    id: response.id,
+    name: response.name,
+    email: response.email,
+    picture: !response.picture.data.is_silhouette ? response.picture.data.url : null
   });
 }
