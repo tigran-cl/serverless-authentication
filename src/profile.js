@@ -6,5 +6,6 @@ export default class Profile {
     this.name = data.name;
     this.email = data.email;
     this.picture = data.picture;
+    this.provider = data.provider;
   }
 }

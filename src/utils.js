@@ -25,6 +25,14 @@ export default class Utils {
   static readToken(token, config) {
     return jwt.verify(token, config.secret);
   }
+
+  static tokenResponse(context, username, config) {
+    var url = this.urlBuilder(config.redirect, {
+      username: username,
+      token: this.createToken(username, config)
+    });
+    context.succeed({url: url});
+  }
 }
 
 

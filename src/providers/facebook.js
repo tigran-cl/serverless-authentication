@@ -35,12 +35,11 @@ export function callback(event, config, callback) {
         }
       };
       request(p, (err, response) => {
-        var result = data;
-        result.client_id = response.id;
-
-        var profile = responseToProfile(response);
-
-        callback(null, profile);
+        if(!err) {
+          callback(null, responseToProfile(response));
+        } else {
+          callback(err);
+        }
       });
     }
   ], (err, data) => {
@@ -53,6 +52,7 @@ function responseToProfile(response) {
     id: response.id,
     name: response.name,
     email: response.email,
-    picture: !response.picture.data.is_silhouette ? response.picture.data.url : null
+    picture: !response.picture.data.is_silhouette ? response.picture.data.url : null,
+    provider: 'facebook'
   });
 }

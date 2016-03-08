@@ -52,6 +52,15 @@ var Utils = function () {
     value: function readToken(token, config) {
       return _jsonwebtoken2.default.verify(token, config.secret);
     }
+  }, {
+    key: 'tokenResponse',
+    value: function tokenResponse(context, username, config) {
+      var url = this.urlBuilder(config.redirect, {
+        username: username,
+        token: this.createToken(username, config)
+      });
+      context.succeed({ url: url });
+    }
   }]);
 
   return Utils;

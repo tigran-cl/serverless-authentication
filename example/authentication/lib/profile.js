@@ -13,6 +13,7 @@ var Profile = function Profile(data) {
   this.name = data.name;
   this.email = data.email;
   this.picture = data.picture;
+  this.provider = data.provider;
 };
 
 exports.default = Profile;

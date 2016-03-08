@@ -31,18 +31,12 @@ module.exports.handler = function(event, context) {
     if(err){
       context.fail(err);
     }else {
-      var username = event.provider + '-' +profile.id;
+      var username = profile.provider + '-' +profile.id;
 
       // check if user exist in db if not create new then return token (username is returned for testing purposes)
 
-      var url = Utils.default.urlBuilder(config.redirect, {
-        username: username,
-        token: Utils.default.createToken(username, config)
-      });
-
-      context.succeed({url: url});
+      Utils.default.tokenResponse(context, username, config);
     }
   }
-
 };
 
