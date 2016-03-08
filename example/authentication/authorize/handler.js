@@ -37,7 +37,7 @@ module.exports.handler = function(event, context) {
     error = true; //Invalid token;
   }
   if (!error) {
-    return context.succeed(generatePolicy(data.client_id, 'Allow', event.methodArn));
+    return context.succeed(generatePolicy(data.id, 'Allow', event.methodArn));
   } else {
     return context.fail('Unauthorized');
   }
