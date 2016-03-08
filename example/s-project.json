@@ -7,6 +7,7 @@
   "description": "Oauth authentication for Serverless",
   "custom": {},
   "plugins": [
-    "serverless-cors-plugin"
+    "serverless-cors-plugin",
+    "serverless-plugin-autoprune"
   ]
 }

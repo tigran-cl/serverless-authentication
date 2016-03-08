@@ -21,8 +21,8 @@
         "application/json": "{\"provider\":\"$input.params('provider')\",\"code\":\"$input.params('code')\",\"host\":\"$input.params().header.get('host')\",\"path\":\"$context.resourcePath\"}"
       },
       "responses": {
-        "400": {
-          "statusCode": "400"
+        "401": {
+          "statusCode": "401"
         },
         "default": {
           "statusCode": "302",

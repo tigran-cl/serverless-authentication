@@ -26,7 +26,19 @@ var generatePolicy = function(principalId, effect, resource) {
 };
 
 module.exports.handler = function(event, context) {
-  var data = Utils.default.readToken(event.authorizationToken, config);
-  // Check that token is valid
-  return context.succeed(generatePolicy(data.client_id, 'Allow', event.methodArn));
+  var error = false;
+  try {
+    var data = Utils.default.readToken(event.authorizationToken, config);
+    var now = (new Date()).getTime();
+    if(data.expires < now) {
+      error = true; //Token expired;
+    }
+  } catch(err) {
+    error = true; //Invalid token;
+  }
+  if (!error) {
+    return context.succeed(generatePolicy(data.client_id, 'Allow', event.methodArn));
+  } else {
+    return context.fail('Unauthorized');
+  }
 };

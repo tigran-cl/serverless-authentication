@@ -10,6 +10,7 @@
     "url": "git@github.com:laardee/serverless-authentication.git"
   },
   "dependencies": {
-    "serverless-cors-plugin": "^0.3.1"
+    "serverless-cors-plugin": "^0.3.1",
+    "serverless-plugin-autoprune": "^0.1.1"
   }
 }
