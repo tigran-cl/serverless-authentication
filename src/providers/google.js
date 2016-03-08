@@ -3,13 +3,14 @@
 import Utils from '../utils';
 import async from 'async';
 import request from '../request';
+import Profile from '../profile';
 
 export function signin(event, config, callback) {
   let params = {
     client_id: config.google.id,
     redirect_uri: Utils.redirectUrlBuilder(event, config),
     response_type: 'code',
-    scope: 'profile'
+    scope: 'profile email'
   };
   let url = Utils.urlBuilder('https://accounts.google.com/o/oauth2/v2/auth', params);
   callback(null, {url: url})
@@ -31,22 +32,25 @@ export function callback(event, config, callback) {
       let p = {
         url: 'https://www.googleapis.com/plus/v1/people/me',
         params: {
-          fields: 'id',
           access_token: data.access_token
         }
       };
-      request(p, (err, res) => {
-        let result = data;
-        result.client_id = res.id;
-        callback(null, result);
+      request(p, (err, response) => {
+        callback(null, responseToProfile(response));
       });
     }
   ], (err, data) => {
-    callback(err, {
-      url: Utils.urlBuilder(config.redirect, {
-        client_id: data.client_id,
-        token: Utils.createToken(data.client_id, config)
-      })
-    });
+    callback(err, data);
   });
 };
+
+
+function responseToProfile(response) {
+  return new Profile({
+    id: response.id,
+    name: response.displayName,
+    email: response.emails[0].value,
+    picture: response.image.url,
+    provider: 'google'
+  });
+}

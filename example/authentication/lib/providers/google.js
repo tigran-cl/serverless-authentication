@@ -18,6 +18,10 @@ var _request = require('../request');
 
 var _request2 = _interopRequireDefault(_request);
 
+var _profile = require('../profile');
+
+var _profile2 = _interopRequireDefault(_profile);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function signin(event, config, callback) {
@@ -25,7 +29,7 @@ function signin(event, config, callback) {
     client_id: config.google.id,
     redirect_uri: _utils2.default.redirectUrlBuilder(event, config),
     response_type: 'code',
-    scope: 'profile'
+    scope: 'profile email'
   };
   var url = _utils2.default.urlBuilder('https://accounts.google.com/o/oauth2/v2/auth', params);
   callback(null, { url: url });
@@ -45,21 +49,23 @@ function callback(event, config, callback) {
     var p = {
       url: 'https://www.googleapis.com/plus/v1/people/me',
       params: {
-        fields: 'id',
         access_token: data.access_token
       }
     };
-    (0, _request2.default)(p, function (err, res) {
-      var result = data;
-      result.client_id = res.id;
-      callback(null, result);
+    (0, _request2.default)(p, function (err, response) {
+      callback(null, responseToProfile(response));
     });
   }], function (err, data) {
-    callback(err, {
-      url: _utils2.default.urlBuilder(config.redirect, {
-        client_id: data.client_id,
-        token: _utils2.default.createToken(data.client_id, config)
-      })
-    });
+    callback(err, data);
   });
 };
+
+function responseToProfile(response) {
+  return new _profile2.default({
+    id: response.id,
+    name: response.displayName,
+    email: response.emails[0].value,
+    picture: response.image.url,
+    provider: 'google'
+  });
+}

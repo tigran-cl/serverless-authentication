@@ -18,7 +18,7 @@ module.exports.handler = function(event, context) {
   if (event.provider === 'facebook') {
     facebook.callback(event, config, handleResponse);
   } else if (event.provider === 'google'){
-    google.callback(event, config, context.done);
+    google.callback(event, config, handleResponse);
   } else if (event.provider === 'twitter') {
     twitter.callback(event, config, context.done);
   } else if (event.provider === 'microsoft') {
@@ -34,7 +34,7 @@ module.exports.handler = function(event, context) {
       var username = profile.provider + '-' +profile.id;
 
       // check if user exist in db if not create new then return token (username is returned for testing purposes)
-
+      //context.done(null, profile);
       Utils.default.tokenResponse(context, username, config);
     }
   }
