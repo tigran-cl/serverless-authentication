@@ -36,13 +36,17 @@ export function callback(event, config, callback) {
         }
       };
       request(p, (err, response) => {
-        callback(null, responseToProfile(response));
+        if(!err) {
+          callback(null, responseToProfile(response));
+        } else {
+          callback(err);
+        }
       });
     }
   ], (err, data) => {
     callback(err, data);
   });
-};
+}
 
 
 function responseToProfile(response) {

@@ -3,12 +3,13 @@
 import Utils from '../utils';
 import async from 'async';
 import request from '../request';
+import Profile from '../profile';
 
 export function signin(event, config, callback) {
   let params = {
     client_id: config.microsoft.id,
     redirect_uri: Utils.redirectUrlBuilder(event, config),
-    scope: 'wl.basic',
+    scope: 'wl.basic wl.emails',
     response_type: 'code'
   };
   let url = Utils.urlBuilder('https://login.live.com/oauth20_authorize.srf', params);
@@ -34,14 +35,26 @@ export function callback(event, config, callback) {
           access_token: data.access_token
         }
       };
-      request(p, (err, res) => {
-        var result = data;
-        result.client_id = res.id;
-        //let profile = new Profile(result);
-        callback(null, result);
+      request(p, (err, response) => {
+        if(!err) {
+          console.log(response);
+          callback(null, responseToProfile(response));
+        } else {
+          callback(err);
+        }
       });
     }
   ], (err, data) => {
-    callback(err, {url: Utils.urlBuilder(config.redirect, {client_id: data.client_id, token: Utils.createToken(data.client_id, config)})});
+    callback(err, data);
+  });
+}
+
+function responseToProfile(response) {
+  return new Profile({
+    id: response.id,
+    name: response.name,
+    email: response.emails.preferred,
+    picture: 'https://apis.live.net/v5.0/'+response.id+'/picture',
+    provider: 'microsoft'
   });
 }

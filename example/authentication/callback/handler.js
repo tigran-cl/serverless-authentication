@@ -22,7 +22,7 @@ module.exports.handler = function(event, context) {
   } else if (event.provider === 'twitter') {
     twitter.callback(event, config, context.done);
   } else if (event.provider === 'microsoft') {
-    microsoft.callback(event, config, context.done);
+    microsoft.callback(event, config, handleResponse);
   } else {
     context.done('Invalid provider');
   }

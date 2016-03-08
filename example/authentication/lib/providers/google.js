@@ -53,12 +53,16 @@ function callback(event, config, callback) {
       }
     };
     (0, _request2.default)(p, function (err, response) {
-      callback(null, responseToProfile(response));
+      if (!err) {
+        callback(null, responseToProfile(response));
+      } else {
+        callback(err);
+      }
     });
   }], function (err, data) {
     callback(err, data);
   });
-};
+}
 
 function responseToProfile(response) {
   return new _profile2.default({
