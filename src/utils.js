@@ -17,8 +17,8 @@ export default class Utils {
     return result.join('&');
   }
 
-  static createToken(id, config) {
-    var token = jwt.sign({id, expires: (new Date()).getTime()+(60*1000)}, config.secret);
+  static createToken(data, config) {
+    var token = jwt.sign(data, config.secret);
     return token;
   }
 
@@ -26,10 +26,10 @@ export default class Utils {
     return jwt.verify(token, config.secret);
   }
 
-  static tokenResponse(context, id, config) {
+  static tokenResponse(context, data, config) {
     var url = this.urlBuilder(config.redirect, {
-      id,
-      token: this.createToken(id, config)
+      id: data.id,
+      token: this.createToken(data, config)
     });
     context.succeed({url: url});
   }
