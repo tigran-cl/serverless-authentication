@@ -14,9 +14,9 @@ var _async = require('async');
 
 var _async2 = _interopRequireDefault(_async);
 
-var _request = require('../request');
+var _authRequest = require('../auth-request');
 
-var _request2 = _interopRequireDefault(_request);
+var _authRequest2 = _interopRequireDefault(_authRequest);
 
 var _profile = require('../profile');
 
@@ -44,12 +44,12 @@ function callback(event, config, callback) {
       code: event.code,
       grant_type: 'authorization_code'
     };
-    (0, _request2.default)({ url: 'https://login.live.com/oauth20_token.srf', params: params, method: 'POST' }, callback);
+    (0, _authRequest2.default)({ url: 'https://login.live.com/oauth20_token.srf', params: params, method: 'POST' }, callback);
   }, function (data, callback) {
     var params = {
       access_token: data.access_token
     };
-    (0, _request2.default)({ url: 'https://apis.live.net/v5.0/me', params: params }, function (err, response) {
+    (0, _authRequest2.default)({ url: 'https://apis.live.net/v5.0/me', params: params }, function (err, response) {
       if (!err) {
         callback(null, responseToProfile(response));
       } else {

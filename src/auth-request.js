@@ -37,7 +37,7 @@ class Request {
     let s = this.options.protocol == 'https:' ? https : http;
     let req = s.request(this.options, (res) => {
       res.on('data', (d) => {
-        let result = JSON.parse(d.toString('utf8'));
+        let result = d.toString('utf8');
         if(callback) {
           callback(null, result);
         }

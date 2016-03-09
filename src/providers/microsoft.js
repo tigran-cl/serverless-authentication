@@ -2,7 +2,7 @@
 
 import Utils from '../utils';
 import async from 'async';
-import request from '../request';
+import request from '../auth-request';
 import Profile from '../profile';
 
 export function signin(event, config, callback) {

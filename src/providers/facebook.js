@@ -2,7 +2,7 @@
 
 import Utils from '../utils';
 import async from 'async';
-import request from '../request';
+import request from 'request';
 import Profile from '../profile';
 
 export function signin(event, config, callback) {
@@ -18,22 +18,27 @@ export function signin(event, config, callback) {
 export function callback(event, config, callback) {
   async.waterfall([
     (callback) => {
-      let params = {
-        client_id: config.facebook.id,
-        redirect_uri: Utils.redirectUrlBuilder(event, config),
-        client_secret: config.facebook.secret,
-        code: event.code
+      let options = {
+        url: Utils.urlBuilder('https://graph.facebook.com/v2.3/oauth/access_token', {
+          client_id: config.facebook.id,
+          redirect_uri: Utils.redirectUrlBuilder(event, config),
+          client_secret: config.facebook.secret,
+          code: event.code
+        })
       };
-      request({url: 'https://graph.facebook.com/v2.3/oauth/access_token', params}, callback);
+      request(options, callback);
     },
-    (data, callback) => {
-      let params = {
-        fields: 'id,name,picture,email',
-        access_token: data.access_token
+    (response, data, callback) => {
+      let d = JSON.parse(data);
+      let options = {
+        url: Utils.urlBuilder('https://graph.facebook.com/me', {
+          fields: 'id,name,picture,email',
+          access_token: d.access_token
+        })
       };
-      request({url: 'https://graph.facebook.com/me', params}, (err, response) => {
-        if(!err) {
-          callback(null, responseToProfile(response));
+      request(options, (error, response, data) => {
+        if(!error) {
+          callback(null, responseToProfile(JSON.parse(data)));
         } else {
           callback(err);
         }

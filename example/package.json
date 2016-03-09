@@ -1,10 +1,10 @@
 {
-  "name": "serverless-authentication",
-  "version": "0.0.1",
-  "description": "Serverless authentication",
-  "author": "me",
+  "name": "serverless-authentication-example",
+  "version": "0.1.0",
+  "description": "Serverless authentication example project",
   "license": "MIT",
   "private": false,
+  "author": "Eetu Tuomala <eetu.tuomala@sc5.io>",
   "repository": {
     "type": "git",
     "url": "git@github.com:laardee/serverless-authentication.git"

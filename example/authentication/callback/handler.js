@@ -31,12 +31,15 @@ module.exports.handler = function(event, context) {
     if(err){
       context.fail(err);
     }else {
+      var testing = false;
       var id = profile.provider + '-' +profile.id;
       var expires = (new Date()).getTime()+(60*1000);
-      // check if user exist in db if not create new then return token (username is returned for testing purposes)
-      //context.done(null, profile);
-      Utils.default.tokenResponse(context, {id: id, expires: expires}, config);
+      // check if user exist in db if not create new then return token
+      if(testing) {
+        context.done(null, profile);
+      } else {
+        Utils.default.tokenResponse(context, {id: id, expires: expires}, config);
+      }
     }
   }
 };
-

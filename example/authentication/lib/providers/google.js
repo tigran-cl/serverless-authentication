@@ -14,7 +14,7 @@ var _async = require('async');
 
 var _async2 = _interopRequireDefault(_async);
 
-var _request = require('../request');
+var _request = require('request');
 
 var _request2 = _interopRequireDefault(_request);
 
@@ -37,21 +37,24 @@ function signin(event, config, callback) {
 
 function callback(event, config, callback) {
   _async2.default.waterfall([function (callback) {
-    var params = {
+    var options = {
       client_id: config.google.id,
       redirect_uri: _utils2.default.redirectUrlBuilder(event, config),
       client_secret: config.google.secret,
       code: event.code,
       grant_type: 'authorization_code'
     };
-    (0, _request2.default)({ url: 'https://www.googleapis.com/oauth2/v4/token', params: params, method: 'POST' }, callback);
-  }, function (data, callback) {
-    var params = {
-      access_token: data.access_token
+    _request2.default.post('https://www.googleapis.com/oauth2/v4/token', { form: options }, callback);
+  }, function (response, data, callback) {
+    var d = JSON.parse(data);
+    var options = {
+      url: _utils2.default.urlBuilder('https://www.googleapis.com/plus/v1/people/me', {
+        access_token: d.access_token
+      })
     };
-    (0, _request2.default)({ url: 'https://www.googleapis.com/plus/v1/people/me', params: params }, function (err, response) {
-      if (!err) {
-        callback(null, responseToProfile(response));
+    (0, _request2.default)(options, function (error, response, data) {
+      if (!error) {
+        callback(null, responseToProfile(JSON.parse(data)));
       } else {
         callback(err);
       }
