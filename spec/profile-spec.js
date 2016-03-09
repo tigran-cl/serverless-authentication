@@ -1,7 +1,7 @@
 "use strict";
 
 let assert = require('assert');
-let Profile = require('../lib/profile').default;
+let Profile = require('../lib').Profile;
 
 describe('Profile', () => {
   describe('create a new Profile', () => {
