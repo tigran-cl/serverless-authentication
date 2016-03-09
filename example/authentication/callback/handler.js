@@ -12,7 +12,7 @@ var google = require('../lib/providers/google');
 var twitter = require('../lib/providers/twitter');
 var microsoft = require('../lib/providers/microsoft');
 
-var Utils = require('../lib/utils');
+var Utils = require('../lib/utils').default;
 
 module.exports.handler = function(event, context) {
   if (event.provider === 'facebook') {
@@ -38,7 +38,7 @@ module.exports.handler = function(event, context) {
       if(testing) {
         context.done(null, profile);
       } else {
-        Utils.default.tokenResponse(context, {id: id, expires: expires}, config);
+        Utils.tokenResponse(context, {id: id, expires: expires}, config);
       }
     }
   }

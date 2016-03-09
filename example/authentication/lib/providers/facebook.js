@@ -36,24 +36,20 @@ function signin(event, config, callback) {
 
 function callback(event, config, callback) {
   _async2.default.waterfall([function (callback) {
-    var options = {
-      url: _utils2.default.urlBuilder('https://graph.facebook.com/v2.3/oauth/access_token', {
-        client_id: config.facebook.id,
-        redirect_uri: _utils2.default.redirectUrlBuilder(event, config),
-        client_secret: config.facebook.secret,
-        code: event.code
-      })
-    };
-    (0, _request2.default)(options, callback);
+    var url = _utils2.default.urlBuilder('https://graph.facebook.com/v2.3/oauth/access_token', {
+      client_id: config.facebook.id,
+      redirect_uri: _utils2.default.redirectUrlBuilder(event, config),
+      client_secret: config.facebook.secret,
+      code: event.code
+    });
+    _request2.default.get(url, callback);
   }, function (response, data, callback) {
     var d = JSON.parse(data);
-    var options = {
-      url: _utils2.default.urlBuilder('https://graph.facebook.com/me', {
-        fields: 'id,name,picture,email',
-        access_token: d.access_token
-      })
-    };
-    (0, _request2.default)(options, function (error, response, data) {
+    var url = _utils2.default.urlBuilder('https://graph.facebook.com/me', {
+      fields: 'id,name,picture,email',
+      access_token: d.access_token
+    });
+    _request2.default.get(url, function (error, response, data) {
       if (!error) {
         callback(null, responseToProfile(JSON.parse(data)));
       } else {
