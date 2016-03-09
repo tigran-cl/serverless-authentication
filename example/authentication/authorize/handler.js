@@ -6,7 +6,7 @@ var ServerlessHelpers = require('serverless-helpers-js').loadEnv();
 // Config
 var config = require('../config');
 
-var Utils = require('../lib/utils');
+var Utils = require('../lib/utils').default;
 
 var generatePolicy = function(principalId, effect, resource) {
   var authResponse = {};
@@ -28,7 +28,7 @@ var generatePolicy = function(principalId, effect, resource) {
 module.exports.handler = function(event, context) {
   var error = false;
   try {
-    var data = Utils.default.readToken(event.authorizationToken, config);
+    var data = Utils.readToken(event.authorizationToken, config);
     var now = (new Date()).getTime();
     if(data.expires < now) {
       error = true; //Token expired;
