@@ -1,9 +1,8 @@
 'use strict';
 
-import Utils from '../utils';
 import async from 'async';
-import request from '../auth-request';
-import Profile from '../profile';
+import request from 'request';
+import {Utils, Profile} from '../index';
 
 export function signin(event, config, callback) {
   let params = {
@@ -19,22 +18,23 @@ export function signin(event, config, callback) {
 export function callback(event, config, callback) {
   async.waterfall([
     (callback) => {
-      let params = {
+      let payload = {
         client_id: config.microsoft.id,
         redirect_uri: Utils.redirectUrlBuilder(event, config),
         client_secret: config.microsoft.secret,
         code: event.code,
         grant_type: 'authorization_code'
       };
-      request({url: 'https://login.live.com/oauth20_token.srf', params, method: 'POST'}, callback);
+      request.post({url: 'https://login.live.com/oauth20_token.srf', form: payload}, callback);
     },
-    (data, callback) => {
-      let params = {
-        access_token: data.access_token
-      };
-      request({url: 'https://apis.live.net/v5.0/me', params}, (err, response) => {
+    (response, data, callback) => {
+      let d = JSON.parse(data);
+      let url = Utils.urlBuilder('https://apis.live.net/v5.0/me', {
+        access_token: d.access_token
+      });
+      request.get(url, (err, response, data) => {
         if(!err) {
-          callback(null, responseToProfile(response));
+          callback(null, mapProfile(JSON.parse(data)));
         } else {
           callback(err);
         }
@@ -45,7 +45,7 @@ export function callback(event, config, callback) {
   });
 }
 
-function responseToProfile(response) {
+function mapProfile(response) {
   return new Profile({
     id: response.id,
     name: response.name,

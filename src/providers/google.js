@@ -1,9 +1,8 @@
 'use strict';
 
-import Utils from '../utils';
 import async from 'async';
 import request from 'request';
-import Profile from '../profile';
+import {Utils, Profile} from '../index';
 
 export function signin(event, config, callback) {
   let params = {
@@ -19,25 +18,23 @@ export function signin(event, config, callback) {
 export function callback(event, config, callback) {
   async.waterfall([
     (callback) => {
-      let options = {
+      let payload = {
         client_id: config.google.id,
         redirect_uri: Utils.redirectUrlBuilder(event, config),
         client_secret: config.google.secret,
         code: event.code,
         grant_type: 'authorization_code'
       };
-      request.post('https://www.googleapis.com/oauth2/v4/token', {form: options}, callback);
+      request.post('https://www.googleapis.com/oauth2/v4/token', {form: payload}, callback);
     },
     (response, data, callback) => {
       let d = JSON.parse(data);
-      let options = {
-        url: Utils.urlBuilder('https://www.googleapis.com/plus/v1/people/me', {
-          access_token: d.access_token
-        })
-      };
-      request(options, (error, response, data) => {
+      let url = Utils.urlBuilder('https://www.googleapis.com/plus/v1/people/me', {
+        access_token: d.access_token
+      });
+      request.get(url, (error, response, data) => {
         if(!error) {
-          callback(null, responseToProfile(JSON.parse(data)));
+          callback(null, mapProfile(JSON.parse(data)));
         } else {
           callback(err);
         }
@@ -48,7 +45,7 @@ export function callback(event, config, callback) {
   });
 }
 
-function responseToProfile(response) {
+function mapProfile(response) {
   return new Profile({
     id: response.id,
     name: response.displayName,

@@ -1,9 +1,8 @@
 'use strict';
 
-import Utils from '../utils';
 import async from 'async';
 import request from 'request';
-import Profile from '../profile';
+import {Utils, Profile} from '../index';
 
 export function signin(event, config, callback) {
   let params = {
@@ -34,7 +33,7 @@ export function callback(event, config, callback) {
       });
       request.get(url, (error, response, data) => {
         if(!error) {
-          callback(null, responseToProfile(JSON.parse(data)));
+          callback(null, mapProfile(JSON.parse(data)));
         } else {
           callback(err);
         }
@@ -45,7 +44,7 @@ export function callback(event, config, callback) {
   });
 }
 
-function responseToProfile(response) {
+function mapProfile(response) {
   return new Profile({
     id: response.id,
     name: response.name,
