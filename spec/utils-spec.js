@@ -3,6 +3,8 @@
 let assert = require('assert');
 let slsAuth = require('../lib');
 
+console.log(slsAuth)
+
 describe('Utils', () => {
   describe('Utils.redirectUrlBuilder', () => {
     it('should replace {provider} with facebook in url', (done) => {

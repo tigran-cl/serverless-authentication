@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export default class Utils {
+export default class utils {
   static redirectUrlBuilder(event, config) {
     return config.callback.replace('{provider}', event.provider);
   }
@@ -18,19 +18,18 @@ export default class Utils {
   }
 
   static createToken(data, config) {
-    var token = jwt.sign(data, config.secret);
-    return token;
+    return jwt.sign(data, config.secret);
   }
 
   static readToken(token, config) {
     return jwt.verify(token, config.secret);
   }
 
-  static tokenResponse(context, data, config) {
+  static tokenResponse(data, config, callback) {
     var url = this.urlBuilder(config.redirect, {
       id: data.id,
       token: this.createToken(data, config)
     });
-    context.succeed({url: url});
+    callback(null, {url: url});
   }
 }

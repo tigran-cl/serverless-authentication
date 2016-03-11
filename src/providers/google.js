@@ -2,16 +2,16 @@
 
 import async from 'async';
 import request from 'request';
-import {Utils, Profile} from '../index';
+import {utils, Profile} from '../index';
 
 export function signin(event, config, callback) {
   let params = {
     client_id: config.google.id,
-    redirect_uri: Utils.redirectUrlBuilder(event, config),
+    redirect_uri: utils.redirectUrlBuilder(event, config),
     response_type: 'code',
     scope: 'profile email'
   };
-  let url = Utils.urlBuilder('https://accounts.google.com/o/oauth2/v2/auth', params);
+  let url = utils.urlBuilder('https://accounts.google.com/o/oauth2/v2/auth', params);
   callback(null, {url: url});
 }
 
@@ -20,7 +20,7 @@ export function callback(event, config, callback) {
     (callback) => {
       let payload = {
         client_id: config.google.id,
-        redirect_uri: Utils.redirectUrlBuilder(event, config),
+        redirect_uri: utils.redirectUrlBuilder(event, config),
         client_secret: config.google.secret,
         code: event.code,
         grant_type: 'authorization_code'
@@ -29,7 +29,7 @@ export function callback(event, config, callback) {
     },
     (response, data, callback) => {
       let d = JSON.parse(data);
-      let url = Utils.urlBuilder('https://www.googleapis.com/plus/v1/people/me', {
+      let url = utils.urlBuilder('https://www.googleapis.com/plus/v1/people/me', {
         access_token: d.access_token
       });
       request.get(url, (error, response, data) => {

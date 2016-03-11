@@ -2,32 +2,32 @@
 
 import async from 'async';
 import request from 'request';
-import {Utils, Profile} from '../index';
+import {utils, Profile} from '../index';
 
 export function signin(event, config, callback) {
   let params = {
-    client_id: config.facebook.id,
-    redirect_uri: Utils.redirectUrlBuilder(event, config),
+    client_id: config.id,
+    redirect_uri: config.redirect_uri,
     scope: 'email'
   };
-  let url = Utils.urlBuilder('https://www.facebook.com/dialog/oauth', params);
+  let url = utils.urlBuilder('https://www.facebook.com/dialog/oauth', params);
   callback(null, {url: url});
 }
 
 export function callback(event, config, callback) {
   async.waterfall([
     (callback) => {
-      let url = Utils.urlBuilder('https://graph.facebook.com/v2.3/oauth/access_token', {
-        client_id: config.facebook.id,
-        redirect_uri: Utils.redirectUrlBuilder(event, config),
-        client_secret: config.facebook.secret,
+      let url = utils.urlBuilder('https://graph.facebook.com/v2.3/oauth/access_token', {
+        client_id: config.id,
+        redirect_uri: config.redirect_uri,
+        client_secret: config.secret,
         code: event.code
       });
       request.get(url, callback);
     },
     (response, data, callback) => {
       let d = JSON.parse(data);
-      let url = Utils.urlBuilder('https://graph.facebook.com/me', {
+      let url = utils.urlBuilder('https://graph.facebook.com/me', {
         fields: 'id,name,picture,email',
         access_token: d.access_token
       });

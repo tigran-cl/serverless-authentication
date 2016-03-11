@@ -20,26 +20,26 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function signin(event, config, callback) {
   var params = {
-    client_id: config.facebook.id,
-    redirect_uri: _index.Utils.redirectUrlBuilder(event, config),
+    client_id: config.id,
+    redirect_uri: config.redirect_uri,
     scope: 'email'
   };
-  var url = _index.Utils.urlBuilder('https://www.facebook.com/dialog/oauth', params);
+  var url = _index.utils.urlBuilder('https://www.facebook.com/dialog/oauth', params);
   callback(null, { url: url });
 }
 
 function callback(event, config, callback) {
   _async2.default.waterfall([function (callback) {
-    var url = _index.Utils.urlBuilder('https://graph.facebook.com/v2.3/oauth/access_token', {
-      client_id: config.facebook.id,
-      redirect_uri: _index.Utils.redirectUrlBuilder(event, config),
-      client_secret: config.facebook.secret,
+    var url = _index.utils.urlBuilder('https://graph.facebook.com/v2.3/oauth/access_token', {
+      client_id: config.id,
+      redirect_uri: config.redirect_uri,
+      client_secret: config.secret,
       code: event.code
     });
     _request2.default.get(url, callback);
   }, function (response, data, callback) {
     var d = JSON.parse(data);
-    var url = _index.Utils.urlBuilder('https://graph.facebook.com/me', {
+    var url = _index.utils.urlBuilder('https://graph.facebook.com/me', {
       fields: 'id,name,picture,email',
       access_token: d.access_token
     });

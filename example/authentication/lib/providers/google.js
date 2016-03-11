@@ -21,11 +21,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function signin(event, config, callback) {
   var params = {
     client_id: config.google.id,
-    redirect_uri: _index.Utils.redirectUrlBuilder(event, config),
+    redirect_uri: _index.utils.redirectUrlBuilder(event, config),
     response_type: 'code',
     scope: 'profile email'
   };
-  var url = _index.Utils.urlBuilder('https://accounts.google.com/o/oauth2/v2/auth', params);
+  var url = _index.utils.urlBuilder('https://accounts.google.com/o/oauth2/v2/auth', params);
   callback(null, { url: url });
 }
 
@@ -33,7 +33,7 @@ function callback(event, config, callback) {
   _async2.default.waterfall([function (callback) {
     var payload = {
       client_id: config.google.id,
-      redirect_uri: _index.Utils.redirectUrlBuilder(event, config),
+      redirect_uri: _index.utils.redirectUrlBuilder(event, config),
       client_secret: config.google.secret,
       code: event.code,
       grant_type: 'authorization_code'
@@ -41,7 +41,7 @@ function callback(event, config, callback) {
     _request2.default.post('https://www.googleapis.com/oauth2/v4/token', { form: payload }, callback);
   }, function (response, data, callback) {
     var d = JSON.parse(data);
-    var url = _index.Utils.urlBuilder('https://www.googleapis.com/plus/v1/people/me', {
+    var url = _index.utils.urlBuilder('https://www.googleapis.com/plus/v1/people/me', {
       access_token: d.access_token
     });
     _request2.default.get(url, function (error, response, data) {

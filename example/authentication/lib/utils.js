@@ -14,12 +14,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Utils = function () {
-  function Utils() {
-    _classCallCheck(this, Utils);
+var utils = function () {
+  function utils() {
+    _classCallCheck(this, utils);
   }
 
-  _createClass(Utils, null, [{
+  _createClass(utils, null, [{
     key: 'redirectUrlBuilder',
     value: function redirectUrlBuilder(event, config) {
       return config.callback.replace('{provider}', event.provider);
@@ -41,8 +41,7 @@ var Utils = function () {
   }, {
     key: 'createToken',
     value: function createToken(data, config) {
-      var token = _jsonwebtoken2.default.sign(data, config.secret);
-      return token;
+      return _jsonwebtoken2.default.sign(data, config.secret);
     }
   }, {
     key: 'readToken',
@@ -51,16 +50,16 @@ var Utils = function () {
     }
   }, {
     key: 'tokenResponse',
-    value: function tokenResponse(context, data, config) {
+    value: function tokenResponse(data, config, callback) {
       var url = this.urlBuilder(config.redirect, {
         id: data.id,
         token: this.createToken(data, config)
       });
-      context.succeed({ url: url });
+      callback(null, { url: url });
     }
   }]);
 
-  return Utils;
+  return utils;
 }();
 
-exports.default = Utils;
+exports.default = utils;

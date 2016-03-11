@@ -5,6 +5,7 @@ var ServerlessHelpers = require('serverless-helpers-js').loadEnv();
 
 // Config
 var config = require('../config');
+var getConfig = require('../configEnv').getConfig;
 
 // Providers
 var facebook = require('../lib/providers/facebook');
@@ -15,8 +16,9 @@ var microsoft = require('../lib/providers/microsoft');
 var Utils = require('../lib/utils').default;
 
 module.exports.handler = function(event, context) {
+  var c = getConfig(event.provider);
   if (event.provider === 'facebook') {
-    facebook.callback(event, config, handleResponse);
+    facebook.callback(event, c, handleResponse);
   } else if (event.provider === 'google'){
     google.callback(event, config, handleResponse);
   } else if (event.provider === 'twitter') {
@@ -38,7 +40,7 @@ module.exports.handler = function(event, context) {
       if(testing) {
         context.done(null, profile);
       } else {
-        Utils.tokenResponse(context, {id: id, expires: expires}, config);
+        Utils.tokenResponse({id: id, expires: expires}, config, context.done);
       }
     }
   }
