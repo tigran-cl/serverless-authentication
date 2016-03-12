@@ -20,8 +20,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function signin(event, config, callback) {
   var params = {
-    client_id: config.microsoft.id,
-    redirect_uri: _index.utils.redirectUrlBuilder(event, config),
+    client_id: config.id,
+    redirect_uri: config.redirect_uri,
     scope: 'wl.basic wl.emails',
     response_type: 'code'
   };
@@ -32,9 +32,9 @@ function signin(event, config, callback) {
 function callback(event, config, callback) {
   _async2.default.waterfall([function (callback) {
     var payload = {
-      client_id: config.microsoft.id,
-      redirect_uri: _index.utils.redirectUrlBuilder(event, config),
-      client_secret: config.microsoft.secret,
+      client_id: config.id,
+      redirect_uri: config.redirect_uri,
+      client_secret: config.secret,
       code: event.code,
       grant_type: 'authorization_code'
     };

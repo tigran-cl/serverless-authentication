@@ -3,7 +3,8 @@
 // Expose modules.
 exports = module.exports = {
   utils: require('./utils').default,
-  Profile: require('./profile').default
+  Profile: require('./profile').default,
+  config: require('./config')
 };
 
 //

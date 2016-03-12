@@ -6,8 +6,8 @@ import {utils, Profile} from '../index';
 
 export function signin(event, config, callback) {
   let params = {
-    client_id: config.google.id,
-    redirect_uri: utils.redirectUrlBuilder(event, config),
+    client_id: config.id,
+    redirect_uri: config.redirect_uri,
     response_type: 'code',
     scope: 'profile email'
   };
@@ -19,9 +19,9 @@ export function callback(event, config, callback) {
   async.waterfall([
     (callback) => {
       let payload = {
-        client_id: config.google.id,
-        redirect_uri: utils.redirectUrlBuilder(event, config),
-        client_secret: config.google.secret,
+        client_id: config.id,
+        redirect_uri: config.redirect_uri,
+        client_secret: config.secret,
         code: event.code,
         grant_type: 'authorization_code'
       };

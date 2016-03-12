@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -17,6 +17,7 @@ var Config = function () {
     var data = process.env;
     this.providers = {};
     for (var key in data) {
+      var value = data[key];
       var providerItem = /PROVIDER_(.*)?_(.*)?/g.exec(key);
       if (providerItem) {
         var provider = providerItem[1].toLowerCase();
@@ -24,18 +25,24 @@ var Config = function () {
         if (!this.providers[provider]) {
           this.providers[provider] = {};
         }
-        this.providers[provider][type] = data[key];
+        this.providers[provider][type] = value;
+      } else if (key === 'REDIRECT_URI') {
+        this.redirect_uri = value;
+      } else if (key === 'REDIRECT_CLIENT_URI') {
+        this.redirect_client_uri = value;
+      } else if (key === 'TOKEN_SECRET') {
+        this.token_secret = value;
       }
     }
   }
 
   _createClass(Config, [{
-    key: "getConfig",
+    key: 'getConfig',
     value: function getConfig(provider) {
-      var result = this.providers[provider];
-      if (!result) {
-        throw new Error("No provider " + provider + " defined");
-      }
+      var result = this.providers[provider] ? this.providers[provider] : {};
+      result.redirect_uri = this.redirect_uri.replace(/{provider}/g, provider);
+      result.redirect_client_uri = this.redirect_client_uri.replace(/{provider}/g, provider);
+      result.token_secret = this.token_secret;
       return result;
     }
   }]);
