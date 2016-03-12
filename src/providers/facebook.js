@@ -50,6 +50,7 @@ function mapProfile(response) {
     name: response.name,
     email: response.email,
     picture: !response.picture.data.is_silhouette ? response.picture.data.url : null,
-    provider: 'facebook'
+    provider: 'facebook',
+    _raw: response
   });
 }

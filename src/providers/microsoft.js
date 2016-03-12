@@ -51,6 +51,7 @@ function mapProfile(response) {
     name: response.name,
     email: response.emails.preferred,
     picture: 'https://apis.live.net/v5.0/'+response.id+'/picture',
-    provider: 'microsoft'
+    provider: 'microsoft',
+    _raw: response
   });
 }

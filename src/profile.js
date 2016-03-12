@@ -7,5 +7,6 @@ export default class Profile {
     this.email = data.email;
     this.picture = data.picture;
     this.provider = data.provider;
+    this._raw = data._raw;
   }
 }

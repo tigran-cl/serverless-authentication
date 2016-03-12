@@ -51,6 +51,7 @@ function mapProfile(response) {
     name: response.displayName,
     email: response.emails[0].value,
     picture: response.image.url,
-    provider: 'google'
+    provider: 'google',
+    _raw: response
   });
 }
