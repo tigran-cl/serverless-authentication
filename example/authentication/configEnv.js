@@ -22,5 +22,3 @@ function getConfig(provider) {
 exports = module.exports = {
    getConfig: getConfig
 };
-
-console.log(getConfig('facebook'));
