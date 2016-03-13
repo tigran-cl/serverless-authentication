@@ -4,11 +4,11 @@ import async from 'async';
 import request from 'request';
 import {utils, Profile} from '../index';
 
-export function signin(event, config, callback) {
+export function signin(event, config, options, callback) {
   let params = {
     client_id: config.id,
     redirect_uri: config.redirect_uri,
-    scope: 'wl.basic wl.emails',
+    scope: options.scope || 'wl.basic',
     response_type: 'code'
   };
   let url = utils.urlBuilder('https://login.live.com/oauth20_authorize.srf', params);
@@ -29,9 +29,7 @@ export function callback(event, config, callback) {
     },
     (response, data, callback) => {
       let d = JSON.parse(data);
-      let url = utils.urlBuilder('https://apis.live.net/v5.0/me', {
-        access_token: d.access_token
-      });
+      let url = utils.urlBuilder('https://apis.live.net/v5.0/me', {access_token: d.access_token});
       request.get(url, (err, response, data) => {
         if(!err) {
           callback(null, mapProfile(JSON.parse(data)));

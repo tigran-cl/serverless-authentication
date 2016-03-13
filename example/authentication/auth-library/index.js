@@ -13,13 +13,13 @@ function signin(event, callback) {
   var providerConfig = config.getConfig(event.provider);
   switch(event.provider) {
     case 'facebook':
-      facebook.signin(event, providerConfig, callback);
+      facebook.signin(event, providerConfig, {scope: 'email'}, callback);
       break;
     case 'google':
-      google.signin(event, providerConfig, callback);
+      google.signin(event, providerConfig, {scope: 'profile email'}, callback);
       break;
     case 'microsoft':
-      microsoft.signin(event, providerConfig, callback);
+      microsoft.signin(event, providerConfig, {scope: 'wl.basic wl.emails'}, callback);
       break;
     default:
       callback('Invalid provider');

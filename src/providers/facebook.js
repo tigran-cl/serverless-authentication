@@ -4,11 +4,11 @@ import async from 'async';
 import request from 'request';
 import {utils, Profile} from '../index';
 
-export function signin(event, config, callback) {
+export function signin(event, config, options, callback) {
   let params = {
     client_id: config.id,
     redirect_uri: config.redirect_uri,
-    scope: 'email'
+    scope: options.scope || ''
   };
   let url = utils.urlBuilder('https://www.facebook.com/dialog/oauth', params);
   callback(null, {url: url});
