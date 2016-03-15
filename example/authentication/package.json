@@ -1,6 +1,6 @@
 {
   "name": "serverless-authentication-module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Serverless module dependencies",
   "author": "me",
   "license": "MIT",

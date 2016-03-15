@@ -1,13 +1,13 @@
 "use strict";
 
 let assert = require('assert');
-let slsAuth = require('../lib');
-let utils = slsAuth.utils;
+let utils = require('../lib').utils;
 let config = require('../lib').config;
 
 describe('Utils', () => {
   describe('Utils.redirectUrlBuilder', () => {
     it('should replace {provider} with facebook in url', () => {
+      //Change to use config
       let testUrl = 'https://api.laardee.com/signin/{provider}';
       let builtUrl = utils.redirectUrlBuilder({provider: 'facebook'}, {callback: testUrl});
       expect(builtUrl).to.equal('https://api.laardee.com/signin/facebook');
@@ -16,6 +16,7 @@ describe('Utils', () => {
   
   describe('Utils.urlBuilder', () => {
     it('should add ?foo=bar to https://api.laardee.com/callback/facebook', () => {
+      //Change to use config
       var builtUrl = utils.urlBuilder('https://api.laardee.com/callback/facebook', {foo: 'bar'});
       expect(builtUrl).to.equal('https://api.laardee.com/callback/facebook?foo=bar');
     });
