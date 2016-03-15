@@ -4,7 +4,7 @@ var config = lib.config;
 var utils = lib.utils;
 
 // Providers
-var facebook = require('../lib/providers/facebook');
+var facebook = require('serverless-authentication-facebook');
 var google = require('../lib/providers/google');
 var microsoft = require('../lib/providers/microsoft');
 
