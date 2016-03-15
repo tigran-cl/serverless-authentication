@@ -17,6 +17,8 @@
     "lodash": "^4.6.0",
     "request": "^2.69.0",
     "serverless-helpers-js": "~0.1.0",
-    "serverless-authentication-facebook": "git@github.com:laardee/serverless-authentication-facebook.git"
+    "serverless-authentication-facebook": "git@github.com:laardee/serverless-authentication-facebook.git",
+    "serverless-authentication-google": "git@github.com:laardee/serverless-authentication-google.git",
+    "serverless-authentication-microsoft": "git@github.com:laardee/serverless-authentication-microsoft.git"
   }
 }

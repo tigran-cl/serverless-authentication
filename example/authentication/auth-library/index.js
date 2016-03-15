@@ -5,8 +5,8 @@ var utils = lib.utils;
 
 // Providers
 var facebook = require('serverless-authentication-facebook');
-var google = require('../lib/providers/google');
-var microsoft = require('../lib/providers/microsoft');
+var google = require('serverless-authentication-google');
+var microsoft = require('serverless-authentication-microsoft');
 
 // Signin switch
 function signin(event, callback) {
