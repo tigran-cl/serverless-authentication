@@ -62,7 +62,7 @@ function authorize(event, callback) {
   var providerConfig = config.getConfig(event.provider);
   var error = false;
   try {
-    var data = utils.readToken(event.authorizationToken, providerConfig);
+    var data = utils.readToken(event.authorizationToken, providerConfig.token_secret);
     var now = (new Date()).getTime();
     if(data.expires < now) {
       error = true; //Token expired;

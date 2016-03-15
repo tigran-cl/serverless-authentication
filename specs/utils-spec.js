@@ -9,7 +9,7 @@ describe('Utils', () => {
     it('should replace {provider} with facebook in url', () => {
       //Change to use config
       let testUrl = 'https://api.laardee.com/signin/{provider}';
-      let builtUrl = utils.redirectUrlBuilder({provider: 'facebook'}, {callback: testUrl});
+      let builtUrl = utils.redirectUrlBuilder(testUrl, 'facebook');
       expect(builtUrl).to.equal('https://api.laardee.com/signin/facebook');
     });
   });
@@ -25,7 +25,7 @@ describe('Utils', () => {
   describe('Utils.createToken', () => {
     it('should create new token', () => {
       let providerConfig = config.getConfig('facebook');
-      var token = utils.createToken({foo: 'bar'}, providerConfig);
+      var token = utils.createToken({foo: 'bar'}, providerConfig.token_secret);
       expect(token).match(/[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+?$/g);
       expect(token.split('.')[0]).to.equal('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9');
     });
@@ -35,7 +35,7 @@ describe('Utils', () => {
     it('should read token', () => {
       let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIiLCJpYXQiOjE0NTc5MDYzMDB9.CG16zqG1NE3SKZPoXZk3Z78_ABLO1oPchrmo0qB8Wlo';
       let providerConfig = config.getConfig('facebook');
-      var data = utils.readToken(token, providerConfig);
+      var data = utils.readToken(token, providerConfig.token_secret);
       expect(data.foo).to.equal('bar');
     });
   });

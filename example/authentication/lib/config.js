@@ -8,7 +8,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.getConfig = getConfig;
 
+var _utils = require('./utils');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Config class
+ */
 
 var Config = function () {
   function Config() {
@@ -40,8 +46,8 @@ var Config = function () {
     key: 'getConfig',
     value: function getConfig(provider) {
       var result = this.providers[provider] ? this.providers[provider] : {};
-      result.redirect_uri = this.redirect_uri.replace(/{provider}/g, provider);
-      result.redirect_client_uri = this.redirect_client_uri.replace(/{provider}/g, provider);
+      result.redirect_uri = _utils.Utils.redirectUrlBuilder(this.redirect_uri, provider);
+      result.redirect_client_uri = _utils.Utils.redirectUrlBuilder(this.redirect_client_uri, provider);
       result.token_secret = this.token_secret;
       return result;
     }
@@ -49,6 +55,11 @@ var Config = function () {
 
   return Config;
 }();
+
+/**
+ * @param provider {string} oauth provider name e.g. facebook or google 
+ */
+
 
 function getConfig(provider) {
   var c = new Config();

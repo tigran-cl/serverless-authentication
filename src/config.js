@@ -1,3 +1,7 @@
+import {Utils} from './utils'; 
+/**
+ * Config class
+ */
 class Config {
   constructor(){
     let data = process.env;
@@ -24,13 +28,16 @@ class Config {
   
   getConfig(provider) {
     let result = this.providers[provider]?this.providers[provider]:{};
-    result.redirect_uri = this.redirect_uri.replace(/{provider}/g, provider);
-    result.redirect_client_uri = this.redirect_client_uri.replace(/{provider}/g, provider);
+    result.redirect_uri = Utils.redirectUrlBuilder(this.redirect_uri, provider);
+    result.redirect_client_uri = Utils.redirectUrlBuilder(this.redirect_client_uri, provider);
     result.token_secret = this.token_secret;
     return result;
   }
 }
 
+/**
+ * @param provider {string} oauth provider name e.g. facebook or google 
+ */
 export function getConfig(provider){
   let c = new Config();
   return c.getConfig(provider);

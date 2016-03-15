@@ -1,6 +1,11 @@
 'use strict';
-
-export default class Profile {
+/**
+ * Profile class that normalizes profile data fetched from authentication provider
+ */
+export class Profile {
+  /**
+   * @param data {object}
+   */
   constructor(data) {
     this.id = data.id;
     this.name = data.name;

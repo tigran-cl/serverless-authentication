@@ -1,14 +1,31 @@
 import jwt from 'jsonwebtoken';
 
-export default class utils {
-  static redirectUrlBuilder(event, config) {
-    return config.callback.replace('{provider}', event.provider);
+/**
+ * Utilities for Serverless Authentication
+ */
+export class Utils {
+  /**
+   * Creates redirectUrl
+   * @param url {string} url base
+   * @param provider {string} provider e.g. facebook
+   */
+  static redirectUrlBuilder(url, provider) {
+    return url.replace(/{provider}/g, provider);
   }
-
+  
+  /**
+   * Creates url with params
+   * @param url {string} url base
+   * @param params {object} url params 
+   */
   static urlBuilder(url, params) {
     return url + '?' + this.urlParams(params);
   }
 
+  /**
+   * Creates &amp; separated params string 
+   * @param params {object}
+   */
   static urlParams(params) {
     let result = [];
     for(let key in params) {
@@ -17,22 +34,44 @@ export default class utils {
     return result.join('&');
   }
 
-  static createToken(data, config) {
-    return jwt.sign(data, config.token_secret);
+  /** 
+   * Creates Json Web Token with data
+   * @param data {object}
+   * @param config {object} with token_secret --> change to secret
+   */
+  static createToken(data, secret) {
+    return jwt.sign(data, secret);
   }
 
-  static readToken(token, config) {
-    return jwt.verify(token, config.token_secret);
+  /** 
+   * Reads Json Web Token and returns object
+   * @param token {string}
+   * @param config {object} with token_secret --> change to secret
+   */
+  static readToken(token, secret) {
+    return jwt.verify(token, secret);
   }
 
+  /**
+   * Creates token response and triggers callback
+   * @param data {object}
+   * @param config {object}
+   * @param callback {function} callback function e.g. context.done
+   */
   static tokenResponse(data, config, callback) {
     var url = this.urlBuilder(config.redirect_client_uri, {
       id: data.id,
-      token: this.createToken(data, config)
+      token: this.createToken(data, config.token_secret)
     });
-    callback(null, {url: url});
+    return callback(null, {url: url});
   }
   
+  /**
+   * Generates Policy for AWS Api Gateway custom authorize
+   * @param principalId {string} data for principalId field
+   * @param effect {string} 'Allow' or 'Deny'
+   * @param resource {string} method arn e.g. event.methodArn (arn:aws:execute-api:<regionId>:<accountId>:<apiId>/<stage>/<method>/<resourcePath>)
+   */
   static generatePolicy(principalId, effect, resource) {
     let authResponse = {};
     authResponse.principalId = principalId;
