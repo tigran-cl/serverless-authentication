@@ -18,7 +18,7 @@ var _index = require('../index');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function signin(event, config, options, callback) {
+function signin(config, options, callback) {
   var params = {
     client_id: config.id,
     redirect_uri: config.redirect_uri,

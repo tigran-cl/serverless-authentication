@@ -4,7 +4,7 @@ import async from 'async';
 import request from 'request';
 import {utils, Profile} from '../index';
 
-export function signin(event, config, options, callback) {
+export function signin(config, options, callback) {
   let params = {
     client_id: config.id,
     redirect_uri: config.redirect_uri,

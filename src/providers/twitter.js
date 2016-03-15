@@ -4,7 +4,7 @@ import async from 'async';
 import request from 'request';
 import {Utils, Profile} from '../index';
 
-export function signin(event, config, callback) {
+export function signin(config, options, callback) {
   callback('Not implemented');
 }
 
