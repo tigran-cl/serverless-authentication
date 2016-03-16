@@ -38,7 +38,7 @@ class Config {
 /**
  * @param provider {string} oauth provider name e.g. facebook or google 
  */
-export function getConfig(provider){
+export function config(provider){
   let c = new Config();
   return c.getConfig(provider);
 }

@@ -10,7 +10,7 @@ var microsoft = require('serverless-authentication-microsoft');
 
 // Signin switch
 function signin(event, callback) {
-  var providerConfig = config.getConfig(event.provider);
+  var providerConfig = config(event.provider);
   switch(event.provider) {
     case 'facebook':
       facebook.signin(providerConfig, {scope: 'email'}, callback);
@@ -28,7 +28,7 @@ function signin(event, callback) {
 
 // Callback switch
 function callback(event, callback) {
-  var providerConfig = config.getConfig(event.provider);
+  var providerConfig = config(event.provider);
   switch(event.provider) {
     case 'facebook':
       facebook.callback(event, providerConfig, handleResponse);
@@ -59,7 +59,7 @@ function callback(event, callback) {
 
 // Authorize
 function authorize(event, callback) {
-  var providerConfig = config.getConfig(event.provider);
+  var providerConfig = config(event.provider);
   var error = false;
   try {
     var data = utils.readToken(event.authorizationToken, providerConfig.token_secret);

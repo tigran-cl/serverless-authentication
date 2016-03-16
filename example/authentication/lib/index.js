@@ -2,13 +2,33 @@
 
 // Expose modules.
 
-exports = module.exports = {
-  utils: require('./utils').Utils,
-  Profile: require('./profile').Profile,
-  config: require('./config')
-};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-//
+var _profile = require('./profile');
 
-//export Profile from './profile';
-//export utils from './utils';
+Object.defineProperty(exports, 'Profile', {
+  enumerable: true,
+  get: function get() {
+    return _profile.Profile;
+  }
+});
+
+var _utils = require('./utils');
+
+Object.defineProperty(exports, 'utils', {
+  enumerable: true,
+  get: function get() {
+    return _utils.Utils;
+  }
+});
+
+var _config = require('./config');
+
+Object.defineProperty(exports, 'config', {
+  enumerable: true,
+  get: function get() {
+    return _config.config;
+  }
+});
