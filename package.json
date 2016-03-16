@@ -26,7 +26,7 @@
   },
   "scripts": {
     "compile": "rm -rf lib/* && babel src --out-dir lib",
-    "prepublish": "npm run compile",
+    "prepublish": "npm run compile-test",
     "build-example": "npm run compile-test && rm -rf example/authentication/lib/* && cp -R lib example/authentication",
     "deploy-example": "npm run build-example && cd example/authentication && sls function deploy",
     "test": "./node_modules/.bin/mocha specs/",
