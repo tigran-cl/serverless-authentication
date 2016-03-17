@@ -1,6 +1,6 @@
 #serverless-authentication
 
-serverless project https://github.com/laardee/serverless-authentication-boilerplate
+Work In Progress, see serverless project https://github.com/laardee/serverless-authentication-boilerplate
 
 test page: http://laardee.github.io/serverless-authentication-gh-pages
 
