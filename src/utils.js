@@ -60,7 +60,6 @@ export class Utils {
    */
   static tokenResponse(data, config, callback) {
     var url = this.urlBuilder(config.redirect_client_uri, {
-      id: data.id,
       token: this.createToken(data, config.token_secret)
     });
     return callback(null, {url: url});
