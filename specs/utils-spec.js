@@ -26,6 +26,7 @@ describe('Utils', () => {
     it('should create new token', () => {
       let providerConfig = config('facebook');
       var token = utils.createToken({foo: 'bar'}, providerConfig.token_secret);
+      console.log(token);
       expect(token).match(/[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+?$/g);
       expect(token.split('.')[0]).to.equal('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9');
     });
