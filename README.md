@@ -1,11 +1,9 @@
-#serverless-authentication
+# serverless-authentication
 
-Work In Progress, see serverless project https://github.com/laardee/serverless-authentication-boilerplate
+Work in Progress. This package contains common functions that Serverless Authentication boilerplate https://www.npmjs.com/package/serverless-authentication-boilerplate and oauth provider packages uses.
 
-test page: http://laardee.github.io/serverless-authentication-gh-pages
+Provider packages:
 
-providers:
-
-* facebook https://github.com/laardee/serverless-authentication-facebook
-* google https://github.com/laardee/serverless-authentication-google
-* windows live https://github.com/laardee/serverless-authentication-microsoft
+* facebook https://www.npmjs.com/package/serverless-authentication-facebook
+* google https://www.npmjs.com/package/serverless-authentication-google
+* windows live https://www.npmjs.com/package/serverless-authentication-microsoft
