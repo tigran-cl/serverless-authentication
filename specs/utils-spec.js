@@ -25,8 +25,7 @@ describe('Utils', () => {
   describe('Utils.createToken', () => {
     it('should create new token', () => {
       let providerConfig = config('facebook');
-      var token = utils.createToken({foo: 'bar'}, providerConfig.token_secret);
-      console.log(token);
+      var token = utils.createToken({foo: 'bar'}, providerConfig.token_secret, {expiresIn: 1});
       expect(token).match(/[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+?$/g);
       expect(token.split('.')[0]).to.equal('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9');
     });
@@ -34,19 +33,38 @@ describe('Utils', () => {
   
   describe('Utils.readToken', () => {
     it('should read token', () => {
-      let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmb28iOiJiYXIiLCJpYXQiOjE0NTc5MDYzMDB9.CG16zqG1NE3SKZPoXZk3Z78_ABLO1oPchrmo0qB8Wlo';
-      let providerConfig = config('facebook');
-      var data = utils.readToken(token, providerConfig.token_secret);
+      let token_secret = config('facebook').token_secret;
+      var token = utils.createToken({foo: 'bar'}, token_secret, {expiresIn: 60});
+      var data = utils.readToken(token, token_secret);
       expect(data.foo).to.equal('bar');
+    });
+
+    it('should fail to read expired token', () => {
+      let token_secret = config('facebook').token_secret;
+      var token = utils.createToken({foo: 'bar'}, token_secret, {expiresIn: 0});
+      try {
+        utils.readToken(token, token_secret);
+      }catch(error){
+        expect(error.name).to.equal('TokenExpiredError');
+        expect(error.message).to.equal('jwt expired');
+      }
     });
   });
   
   describe('Utils.tokenResponse', () => {
     it('should return token response', () => {
       let providerConfig = config('facebook');
-      utils.tokenResponse({id: 'bar'}, providerConfig, (err, data) => {
+      let testdata = {
+        payload: {
+          id: 'bar'
+        },
+        options: {
+          expiresIn: 60
+        }
+      };
+      utils.tokenResponse(testdata, providerConfig, (err, data) => {
         expect(data.url).to.match(/http:\/\/localhost:3000\/auth\/facebook\/(\D)*[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+?$/);
-      });    
+      });
     });
   });
   

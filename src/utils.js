@@ -39,8 +39,8 @@ export class Utils {
    * @param data {object}
    * @param config {object} with token_secret --> change to secret
    */
-  static createToken(data, secret) {
-    return jwt.sign(data, secret);
+  static createToken(data, secret, options) {
+    return jwt.sign(data, secret, options);
   }
 
   /** 
@@ -48,19 +48,19 @@ export class Utils {
    * @param token {string}
    * @param config {object} with token_secret --> change to secret
    */
-  static readToken(token, secret) {
-    return jwt.verify(token, secret);
+  static readToken(token, secret, options) {
+    return jwt.verify(token, secret, options);
   }
 
   /**
    * Creates token response and triggers callback
-   * @param data {object}
-   * @param config {object}
+   * @param data {payload: object, options: object}
+   * @param config {redirect_client_uri {string}, token_secret {string}}
    * @param callback {function} callback function e.g. context.done
    */
-  static tokenResponse(data, config, callback) {
-    var url = this.urlBuilder(config.redirect_client_uri, {
-      token: this.createToken(data, config.token_secret)
+  static tokenResponse({payload, options}, {redirect_client_uri, token_secret}, callback) {
+    let url = this.urlBuilder(redirect_client_uri, {
+      token: this.createToken(payload, token_secret, options)
     });
     return callback(null, {url: url});
   }
