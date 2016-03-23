@@ -38,10 +38,23 @@ class Config {
 /**
  * @param provider {string} oauth provider name e.g. facebook or google 
  */
-export function config({provider, host, stage}){
+export function config(options){
+  let provider;
+  let host;
+  let stage;
+  // fallback -- remove on version upgrade
+  if(typeof (options) === 'string'){
+    provider = options;
+  }else{
+    provider = options.provider;
+    host = options.host;
+    stage = options.stage;
+  }
+
   if (!process.env.REDIRECT_URI) {
     process.env.REDIRECT_URI = 'https://'+ host + '/' + stage + '/callback/{provider}';
   }
+
   let c = new Config();
   return c.getConfig(provider);
 }
