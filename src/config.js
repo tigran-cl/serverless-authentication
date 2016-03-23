@@ -52,7 +52,7 @@ export function config(options){
   }
 
   if (!process.env.REDIRECT_URI) {
-    process.env.REDIRECT_URI = 'https://'+ host + '/' + stage + '/callback/{provider}';
+    process.env.REDIRECT_URI = 'https://'+ host + '/' + stage + '/authentication/callback/{provider}';
   }
 
   let c = new Config();

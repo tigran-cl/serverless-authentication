@@ -9,7 +9,7 @@ describe('Config', () => {
       let providerConfig = config({provider: 'facebook'});
       expect(providerConfig.id).to.equal('fb-mock-id');
       expect(providerConfig.secret).to.equal('fb-mock-secret');
-      expect(providerConfig.redirect_uri).to.equal('https://api-id.execute-api.eu-west-1.amazonaws.com/dev/callback/facebook');
+      expect(providerConfig.redirect_uri).to.equal('https://api-id.execute-api.eu-west-1.amazonaws.com/dev/authentication/callback/facebook');
       expect(providerConfig.redirect_client_uri).to.equal('http://localhost:3000/auth/facebook/');
     });
 
@@ -17,7 +17,7 @@ describe('Config', () => {
       let providerConfig = config('facebook');
       expect(providerConfig.id).to.equal('fb-mock-id');
       expect(providerConfig.secret).to.equal('fb-mock-secret');
-      expect(providerConfig.redirect_uri).to.equal('https://api-id.execute-api.eu-west-1.amazonaws.com/dev/callback/facebook');
+      expect(providerConfig.redirect_uri).to.equal('https://api-id.execute-api.eu-west-1.amazonaws.com/dev/authentication/callback/facebook');
       expect(providerConfig.redirect_client_uri).to.equal('http://localhost:3000/auth/facebook/');
     });
 
@@ -26,7 +26,7 @@ describe('Config', () => {
       let providerConfig = config({provider: 'facebook', stage: 'prod', host: 'test-api-id.execute-api.eu-west-1.amazonaws.com'});
       expect(providerConfig.id).to.equal('fb-mock-id');
       expect(providerConfig.secret).to.equal('fb-mock-secret');
-      expect(providerConfig.redirect_uri).to.equal('https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/callback/facebook');
+      expect(providerConfig.redirect_uri).to.equal('https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/facebook');
       expect(providerConfig.redirect_client_uri).to.equal('http://localhost:3000/auth/facebook/');
     });
   });
