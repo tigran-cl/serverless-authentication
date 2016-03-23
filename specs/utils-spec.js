@@ -33,14 +33,14 @@ describe('Utils', () => {
   
   describe('Utils.readToken', () => {
     it('should read token', () => {
-      let token_secret = config('facebook').token_secret;
+      let token_secret = config({provider: 'facebook'}).token_secret;
       var token = utils.createToken({foo: 'bar'}, token_secret, {expiresIn: 60});
       var data = utils.readToken(token, token_secret);
       expect(data.foo).to.equal('bar');
     });
 
     it('should fail to read expired token', () => {
-      let token_secret = config('facebook').token_secret;
+      let token_secret = config({provider: 'facebook'}).token_secret;
       var token = utils.createToken({foo: 'bar'}, token_secret, {expiresIn: 0});
       try {
         utils.readToken(token, token_secret);
@@ -53,7 +53,7 @@ describe('Utils', () => {
   
   describe('Utils.tokenResponse', () => {
     it('should return token response', () => {
-      let providerConfig = config('facebook');
+      let providerConfig = config({provider: 'facebook'});
       let testdata = {
         payload: {
           id: 'bar'
