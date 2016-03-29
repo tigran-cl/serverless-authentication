@@ -64,7 +64,18 @@ export class Utils {
     });
     return callback(null, {url: url});
   }
-  
+
+  /**
+   * Creates error response and triggers callback
+   * @param params
+   * @param config {redirect_client_uri {string}}
+   * @param callback {function} callback function e.g. context.done
+   */
+  static errorResponse(params, {redirect_client_uri}, callback) {
+    let url = this.urlBuilder(redirect_client_uri, params);
+    return callback(null, {url: url});
+  }
+
   /**
    * Generates Policy for AWS Api Gateway custom authorize
    * @param principalId {string} data for principalId field

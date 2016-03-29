@@ -67,6 +67,16 @@ describe('Utils', () => {
       });
     });
   });
+
+  describe('Utils.errorResponse', () => {
+    it('should return error response', () => {
+      let providerConfig = config({provider: 'crappy-provider'});
+      let params = {error: 'Invalid provider'};
+      utils.errorResponse(params, providerConfig, (err, data) => {
+        expect(data.url).to.equal('http://localhost:3000/auth/crappy-provider/?error=Invalid provider');
+      });
+    });
+  });
   
   describe('Utils.generatePolicy', () => {
     it('should generate policy', () => {
