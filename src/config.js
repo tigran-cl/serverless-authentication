@@ -31,6 +31,7 @@ class Config {
     result.redirect_uri = Utils.redirectUrlBuilder(this.redirect_uri, provider);
     result.redirect_client_uri = Utils.redirectUrlBuilder(this.redirect_client_uri, provider);
     result.token_secret = this.token_secret;
+    result.provider = provider;
     return result;
   }
 }
