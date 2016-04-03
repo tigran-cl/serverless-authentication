@@ -27,7 +27,8 @@ class Config {
   }
   
   getConfig(provider) {
-    let result = this.providers[provider]?this.providers[provider]:{};
+    let configProvider = provider.replace(/-/g, '_');
+    let result = this.providers[configProvider]?this.providers[configProvider]:{};
     result.redirect_uri = Utils.redirectUrlBuilder(this.redirect_uri, provider);
     result.redirect_client_uri = Utils.redirectUrlBuilder(this.redirect_client_uri, provider);
     result.token_secret = this.token_secret;

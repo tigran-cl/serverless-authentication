@@ -29,5 +29,23 @@ describe('Config', () => {
       expect(providerConfig.redirect_uri).to.equal('https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/facebook');
       expect(providerConfig.redirect_client_uri).to.equal('http://localhost:3000/auth/facebook/');
     });
+
+    it('test custom-config', () => {
+      let providerConfig = config({provider: 'custom-config'});
+      console.log(providerConfig);
+      expect(providerConfig.id).to.equal('cc-mock-id');
+      expect(providerConfig.secret).to.equal('cc-mock-secret');
+      expect(providerConfig.redirect_uri).to.equal('https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/custom-config');
+      expect(providerConfig.redirect_client_uri).to.equal('http://localhost:3000/auth/custom-config/');
+    });
+
+    it('test custom_config', () => {
+      let providerConfig = config({provider: 'custom_config'});
+      console.log(providerConfig);
+      expect(providerConfig.id).to.equal('cc-mock-id');
+      expect(providerConfig.secret).to.equal('cc-mock-secret');
+      expect(providerConfig.redirect_uri).to.equal('https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/custom_config');
+      expect(providerConfig.redirect_client_uri).to.equal('http://localhost:3000/auth/custom_config/');
+    });
   });
 });
