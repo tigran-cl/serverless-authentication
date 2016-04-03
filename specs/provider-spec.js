@@ -28,9 +28,10 @@ describe('Provider', () => {
     });
 
     it('should fail to return signin url', () => {
-      let provider = 'facebook';
+      let provider = 'crappyauth';
+      let providerConfig = config({provider: provider});
       let options = {authorization_url: 'https://auth.laardee.com/signin/', scope: 'email', state: 'state-123'};
-      (new Provider({})).signin(options, (error, data) => {
+      (new Provider(providerConfig)).signin(options, (error, data) => {
         expect(error).not.to.be.null;
       });
     });
