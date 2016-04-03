@@ -23,7 +23,7 @@ export class Provider {
       params.state = state;
     }
     if (!params.client_id || !params.redirect_uri) {
-      callback('Invalid signin params.');
+      callback(`Invalid sign in params. #{params.client.id} #{params.redirect_uri}`);
     } else {
       let url = Utils.urlBuilder(signing_url, params);
       callback(null, {url});
