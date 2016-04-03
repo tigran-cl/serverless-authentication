@@ -30,7 +30,8 @@ export class Provider {
     }
   }
 
-  callback({code, state}, {authorization_uri, profile_uri, profileMap}, additionalParams, callback) {
+  callback({code, state}, {authorization_uri, profile_uri, profileMap, authorizationMethod}, additionalParams, callback) {
+    let {authorization, profile} = additionalParams;
     let {id, redirect_uri, secret, provider} = this.config;
     async.waterfall([
       (callback) => {
@@ -40,15 +41,20 @@ export class Provider {
           client_secret: secret,
           code
         };
-        let payload = Object.assign(mandatoryParams, additionalParams);
-        request.post(authorization_uri, {form: payload}, callback);
+        let payload = Object.assign(mandatoryParams, authorization);
+        if (authorizationMethod === 'GET') {
+          let url = Utils.urlBuilder(authorization_uri, payload);
+          request.get(url, callback);
+        } else {
+          request.post(authorization_uri, {form: payload}, callback);
+        }
       },
       (response, accessData, callback) => {
         if (!accessData) {
           callback('No access data');
         }
         let {access_token} = JSON.parse(accessData);
-        let url = Utils.urlBuilder(profile_uri, {access_token});
+        let url = Utils.urlBuilder(profile_uri, Object.assign({access_token}, profile));
         request.get(url, (error, response, profileData) => {
           if (error) {
             callback(error);
