@@ -12,7 +12,7 @@ describe('Provider', () => {
     it('should return facebook signin url', () => {
       let provider = 'facebook';
       let providerConfig = config({provider: provider});
-      let options = {signing_url: 'https://auth.laardee.com/signin/' + provider, scope: 'email', state: 'state-123'};
+      let options = {signing_uri: 'https://auth.laardee.com/signin/' + provider, scope: 'email', state: 'state-123'};
       (new Provider(providerConfig)).signin(options, (err, data) => {
         expect(data.url).to.equal('https://auth.laardee.com/signin/facebook?client_id=fb-mock-id&redirect_uri=https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/facebook&scope=email&state=state-123');
       });
@@ -21,7 +21,7 @@ describe('Provider', () => {
     it('should return custom signin url', () => {
       let provider = 'custom-config';
       let providerConfig = config({provider: provider});
-      let options = {signing_url: 'https://auth.laardee.com/signin/' + provider, scope: 'email', state: 'state-123'};
+      let options = {signing_uri: 'https://auth.laardee.com/signin/' + provider, scope: 'email', state: 'state-123'};
       (new Provider(providerConfig)).signin(options, (err, data) => {
         expect(data.url).to.equal('https://auth.laardee.com/signin/custom-config?client_id=cc-mock-id&redirect_uri=https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/custom-config&scope=email&state=state-123');
       });
