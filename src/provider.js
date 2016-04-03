@@ -30,18 +30,17 @@ export class Provider {
     }
   }
 
-  callback({code, state}, {authorization_uri, profile_uri, profileMap, grant_type}, callback) {
+  callback({code, state}, {authorization_uri, profile_uri, profileMap}, additionalParams, callback) {
     let {id, redirect_uri, secret, provider} = this.config;
     async.waterfall([
       (callback) => {
-        //@todo implement better mapping
-        let payload = {
+        let mandatoryParams = {
           client_id: id,
           redirect_uri,
           client_secret: secret,
-          code,
-          grant_type
+          code
         };
+        let payload = Object.assign(mandatoryParams, additionalParams);
         request.post(authorization_uri, {form: payload}, callback);
       },
       (response, accessData, callback) => {

@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "async": "^1.5.2",
+    "babel-polyfill": "^6.7.4",
     "jsonwebtoken": "^5.7.0",
     "lodash": "^4.6.0",
     "request": "^2.69.0"

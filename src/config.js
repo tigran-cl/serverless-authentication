@@ -1,18 +1,18 @@
-import {Utils} from './utils'; 
+import {Utils} from './utils';
 /**
  * Config class
  */
 class Config {
-  constructor(){
+  constructor() {
     let data = process.env;
     this.providers = {};
-    for(let key in data) {
+    for (let key in data) {
       let value = data[key];
       let providerItem = (/PROVIDER_(.*)?_(.*)?/g).exec(key);
-      if(providerItem) {
+      if (providerItem) {
         var provider = providerItem[1].toLowerCase();
         var type = providerItem[2].toLowerCase();
-        if(!this.providers[provider]) {
+        if (!this.providers[provider]) {
           this.providers[provider] = {};
         }
         this.providers[provider][type] = value;
@@ -25,10 +25,10 @@ class Config {
       }
     }
   }
-  
+
   getConfig(provider) {
     let configProvider = provider.replace(/-/g, '_');
-    let result = this.providers[configProvider]?this.providers[configProvider]:{};
+    let result = this.providers[configProvider] ? this.providers[configProvider] : {};
     result.redirect_uri = Utils.redirectUrlBuilder(this.redirect_uri, provider);
     result.redirect_client_uri = Utils.redirectUrlBuilder(this.redirect_client_uri, provider);
     result.token_secret = this.token_secret;
@@ -38,23 +38,23 @@ class Config {
 }
 
 /**
- * @param provider {string} oauth provider name e.g. facebook or google 
+ * @param provider {string} oauth provider name e.g. facebook or google
  */
-export function config(options){
+export function config(options) {
   let provider;
   let host;
   let stage;
   // fallback -- remove on version upgrade
-  if(typeof (options) === 'string'){
+  if (typeof (options) === 'string') {
     provider = options;
-  }else{
+  } else {
     provider = options.provider;
     host = options.host;
     stage = options.stage;
   }
 
   if (!process.env.REDIRECT_URI) {
-    process.env.REDIRECT_URI = 'https://'+ host + '/' + stage + '/authentication/callback/{provider}';
+    process.env.REDIRECT_URI = 'https://' + host + '/' + stage + '/authentication/callback/{provider}';
   }
 
   let c = new Config();

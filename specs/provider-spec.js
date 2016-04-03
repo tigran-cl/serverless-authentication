@@ -94,7 +94,11 @@ describe('Provider', () => {
         profileMap: profileMap
       };
 
-      (new Provider(providerConfig)).callback({code: 'abcde', state: 'state-123'}, options, (error, profile) => {
+      let additionalParams = {
+        grant_type: 'authorization_code'
+      };
+
+      (new Provider(providerConfig)).callback({code: 'abcde', state: 'state-123'}, options, additionalParams, (error, profile) => {
         expect(profile.id).to.equal(expectedProfile.id);
         expect(profile.name).to.equal(expectedProfile.name);
         expect(profile.email).to.equal(expectedProfile.email);

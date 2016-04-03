@@ -12,29 +12,29 @@ export class Utils {
   static redirectUrlBuilder(url, provider) {
     return url.replace(/{provider}/g, provider);
   }
-  
+
   /**
    * Creates url with params
    * @param url {string} url base
-   * @param params {object} url params 
+   * @param params {object} url params
    */
   static urlBuilder(url, params) {
     return url + '?' + this.urlParams(params);
   }
 
   /**
-   * Creates &amp; separated params string 
+   * Creates &amp; separated params string
    * @param params {object}
    */
   static urlParams(params) {
     let result = [];
-    for(let key in params) {
+    for (let key in params) {
       result.push(`${key}=${params[key]}`);
     }
     return result.join('&');
   }
 
-  /** 
+  /**
    * Creates Json Web Token with data
    * @param data {object}
    * @param config {object} with token_secret --> change to secret
@@ -43,7 +43,7 @@ export class Utils {
     return jwt.sign(data, secret, options);
   }
 
-  /** 
+  /**
    * Reads Json Web Token and returns object
    * @param token {string}
    * @param config {object} with token_secret --> change to secret
@@ -89,7 +89,7 @@ export class Utils {
       let policyDocument = {};
       policyDocument.Version = '2012-10-17';
       policyDocument.Statement = [];
-      
+
       let statementOne = {};
       statementOne.Action = 'execute-api:Invoke';
       statementOne.Effect = effect;
