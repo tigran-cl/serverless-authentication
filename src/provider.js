@@ -7,7 +7,7 @@ export class Provider {
     this.config = config;
   }
 
-  signin({signing_uri, scope, state, response_type}, callback) {
+  signin({signin_uri, scope, state, response_type}, callback) {
     let {id, redirect_uri} = this.config;
     let params = {
       client_id: id,
@@ -25,7 +25,7 @@ export class Provider {
     if (!params.client_id || !params.redirect_uri) {
       callback(`Invalid sign in params. ${params.client_id} ${params.redirect_uri}`);
     } else {
-      let url = Utils.urlBuilder(signing_uri, params);
+      let url = Utils.urlBuilder(signin_uri, params);
       callback(null, {url});
     }
   }
