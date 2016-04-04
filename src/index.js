@@ -1,5 +1,4 @@
 'use strict';
-import "babel-polyfill";
 
 // Expose modules.
 export {Profile} from './profile';
