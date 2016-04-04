@@ -104,7 +104,7 @@ describe('Provider', () => {
         expect(profile.email).to.equal(expectedProfile.email);
         expect(profile.picture).to.equal(expectedProfile.picture);
         expect(profile.provider).to.equal(expectedProfile.provider);
-        done();
+        done(error);
       });
     });
   });

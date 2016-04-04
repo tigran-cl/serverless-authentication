@@ -2,6 +2,9 @@ import {Utils} from './utils';
 import async from 'async';
 import request from 'request';
 
+/**
+ * Default provider
+ */
 export class Provider {
   constructor(config) {
     this.config = config;
