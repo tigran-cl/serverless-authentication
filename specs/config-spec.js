@@ -45,5 +45,10 @@ describe('Config', () => {
       expect(providerConfig.redirect_uri).to.equal('https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/custom_config');
       expect(providerConfig.redirect_client_uri).to.equal('http://localhost:3000/auth/custom_config/');
     });
+
+    it('tests empty config', () => {
+      let providerConfig = config({});
+      expect(providerConfig.token_secret).to.equal('token-secret-123');
+    });
   });
 });

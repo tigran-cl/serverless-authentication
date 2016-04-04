@@ -27,12 +27,15 @@ class Config {
   }
 
   getConfig(provider) {
-    let configProvider = provider.replace(/-/g, '_');
-    let result = this.providers[configProvider] ? this.providers[configProvider] : {};
-    result.redirect_uri = Utils.redirectUrlBuilder(this.redirect_uri, provider);
-    result.redirect_client_uri = Utils.redirectUrlBuilder(this.redirect_client_uri, provider);
+    let result = {};
+    if(provider) {
+      let configProvider = provider.replace(/-/g, '_');
+      result = this.providers[configProvider] ? this.providers[configProvider] : {};
+      result.redirect_uri = Utils.redirectUrlBuilder(this.redirect_uri, provider);
+      result.redirect_client_uri = Utils.redirectUrlBuilder(this.redirect_client_uri, provider);
+      result.provider = provider;
+    }
     result.token_secret = this.token_secret;
-    result.provider = provider;
     return result;
   }
 }
