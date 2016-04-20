@@ -59,9 +59,14 @@ export class Utils {
    * @param callback {function} callback function e.g. context.done
    */
   static tokenResponse({payload, options}, {redirect_client_uri, token_secret}, callback) {
-    let url = this.urlBuilder(redirect_client_uri, {
+    let params = {
       token: this.createToken(payload, token_secret, options)
-    });
+    };
+    let {refresh} = payload;
+    if(refresh) {
+      params.refresh = refresh;
+    }
+    let url = this.urlBuilder(redirect_client_uri, params);
     return callback(null, {url: url});
   }
 

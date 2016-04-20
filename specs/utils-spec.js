@@ -1,8 +1,9 @@
 'use strict';
 
-let assert = require('assert');
-let utils = require('../lib').utils;
-let config = require('../lib').config;
+const assert = require('assert');
+const utils = require('../lib').utils;
+const config = require('../lib').config;
+const crypto = require('crypto');
 
 describe('Utils', () => {
   describe('Utils.redirectUrlBuilder', () => {
@@ -64,6 +65,31 @@ describe('Utils', () => {
       };
       utils.tokenResponse(testdata, providerConfig, (err, data) => {
         expect(data.url).to.match(/http:\/\/localhost:3000\/auth\/facebook\/(\D)*[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+?$/);
+      });
+    });
+  });
+
+  describe('Utils.tokenResponse with refresh token', () => {
+    it('should return token response with refresh token', () => {
+      let providerConfig = config({provider: 'facebook'});
+
+      let id = 'bar';
+
+      const time = (new Date()).getTime();
+      const hmac = crypto.createHmac('sha256', providerConfig.token_secret);
+      hmac.update(`${id}-${time}`);
+      const refresh = hmac.digest('hex');
+      const testdata = {
+        payload: {
+          id,
+          refresh
+        },
+        options: {
+          expiresIn: 60,
+        }
+      };
+      utils.tokenResponse(testdata, providerConfig, (err, data) => {
+        expect(data.url).to.match(/http:\/\/localhost:3000\/auth\/facebook\/\?token=(\D)*[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+&refresh=[A-Fa-f0-9]{64}$/);
       });
     });
   });
