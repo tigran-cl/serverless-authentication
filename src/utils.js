@@ -58,11 +58,10 @@ export class Utils {
    * @param config {redirect_client_uri {string}, token_secret {string}}
    * @param callback {function} callback function e.g. context.done
    */
-  static tokenResponse({payload, options}, {redirect_client_uri, token_secret}, callback) {
+  static tokenResponse({payload, options, refresh}, {redirect_client_uri, token_secret}, callback) {
     let params = {
       token: this.createToken(payload, token_secret, options)
     };
-    let {refresh} = payload;
     if(refresh) {
       params.refresh = refresh;
     }
