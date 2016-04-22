@@ -56,7 +56,7 @@ describe('Utils', () => {
   describe('Utils.tokenResponse', () => {
     it('should return token response', () => {
       const providerConfig = config({ provider: 'facebook' });
-      const testdata = {
+      const authorizationToken = {
         payload: {
           id: 'bar'
         },
@@ -64,7 +64,7 @@ describe('Utils', () => {
           expiresIn: 60
         }
       };
-      utils.tokenResponse(testdata, providerConfig, (err, data) => {
+      utils.tokenResponse({ authorizationToken }, providerConfig, (err, data) => {
         expect(data.url).to.match(/http:\/\/localhost:3000\/auth\/facebook\/(\D)*[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+?$/);
       });
     });
@@ -77,18 +77,17 @@ describe('Utils', () => {
       const time = (new Date()).getTime();
       const hmac = crypto.createHmac('sha256', providerConfig.token_secret);
       hmac.update(`${id}-${time}`);
-      const refresh = hmac.digest('hex');
-      const testdata = {
+      const refreshToken = hmac.digest('hex');
+      const authorizationToken = {
         payload: {
           id
         },
         options: {
-          expiresIn: 60,
-        },
-        refresh
+          expiresIn: 15
+        }
       };
-      utils.tokenResponse(testdata, providerConfig, (err, data) => {
-        expect(data.url).to.match(/http:\/\/localhost:3000\/auth\/facebook\/\?token=[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?&refresh=[A-Fa-f0-9]{64}$/);
+      utils.tokenResponse({ authorizationToken, refreshToken, id }, providerConfig, (err, data) => {
+        expect(data.url).to.match(/http:\/\/localhost:3000\/auth\/facebook\/\?authorization_token=[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?&refresh_token=[A-Fa-f0-9]{64}&id=.+$/);
       });
     });
   });

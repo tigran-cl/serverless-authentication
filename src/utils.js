@@ -61,16 +61,20 @@ export class Utils {
    * @param config {redirect_client_uri {string}, token_secret {string}}
    * @param callback {function} callback function e.g. context.done
    */
-  static tokenResponse(
-    { payload, options, refresh },
-    { redirect_client_uri, token_secret },
-    callback) {
+  static tokenResponse(data, { redirect_client_uri, token_secret }, callback) {
+    const { payload, options } = data.authorizationToken;
     const params = {
-      token: this.createToken(payload, token_secret, options)
+      authorizationToken: this.createToken(payload, token_secret, options)
     };
-    if (refresh) {
-      params.refresh = refresh;
+
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        if (key !== 'authorizationToken') {
+          params[key] = data[key];
+        }
+      }
     }
+
     const url = this.urlBuilder(redirect_client_uri, params);
     return callback(null, { url });
   }
