@@ -89,7 +89,7 @@ describe('Utils', () => {
         refresh
       };
       utils.tokenResponse(testdata, providerConfig, (err, data) => {
-        expect(data.url).to.match(/http:\/\/localhost:3000\/auth\/facebook\/\?token=(\D)*[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+&refresh=[A-Fa-f0-9]{64}$/);
+        expect(data.url).to.match(/http:\/\/localhost:3000\/auth\/facebook\/\?token=[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?&refresh=[A-Fa-f0-9]{64}$/);
       });
     });
   });
