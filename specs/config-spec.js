@@ -1,12 +1,12 @@
 'use strict';
 
-let assert = require('assert');
-let config = require('../lib').config;
+const config = require('../lib').config;
+const expect = require('chai').expect;
 
 describe('Config', () => {
   describe('create a new Config', () => {
     it('tests facebook config', () => {
-      let providerConfig = config({provider: 'facebook'});
+      const providerConfig = config({ provider: 'facebook' });
       expect(providerConfig.id).to.equal('fb-mock-id');
       expect(providerConfig.secret).to.equal('fb-mock-secret');
       expect(providerConfig.redirect_uri).to.equal('https://api-id.execute-api.eu-west-1.amazonaws.com/dev/authentication/callback/facebook');
@@ -14,7 +14,7 @@ describe('Config', () => {
     });
 
     it('tests facebook config with fallback string provider', () => {
-      let providerConfig = config('facebook');
+      const providerConfig = config('facebook');
       expect(providerConfig.id).to.equal('fb-mock-id');
       expect(providerConfig.secret).to.equal('fb-mock-secret');
       expect(providerConfig.redirect_uri).to.equal('https://api-id.execute-api.eu-west-1.amazonaws.com/dev/authentication/callback/facebook');
@@ -23,7 +23,12 @@ describe('Config', () => {
 
     it('tests facebook config with out REDIRECT_URI env variable', () => {
       delete process.env.REDIRECT_URI;
-      let providerConfig = config({provider: 'facebook', stage: 'prod', host: 'test-api-id.execute-api.eu-west-1.amazonaws.com'});
+      const providerConfig =
+        config({
+          provider: 'facebook',
+          stage: 'prod',
+          host: 'test-api-id.execute-api.eu-west-1.amazonaws.com'
+        });
       expect(providerConfig.id).to.equal('fb-mock-id');
       expect(providerConfig.secret).to.equal('fb-mock-secret');
       expect(providerConfig.redirect_uri).to.equal('https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/facebook');
@@ -31,7 +36,7 @@ describe('Config', () => {
     });
 
     it('tests custom-config', () => {
-      let providerConfig = config({provider: 'custom-config'});
+      const providerConfig = config({ provider: 'custom-config' });
       expect(providerConfig.id).to.equal('cc-mock-id');
       expect(providerConfig.secret).to.equal('cc-mock-secret');
       expect(providerConfig.redirect_uri).to.equal('https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/custom-config');
@@ -39,7 +44,7 @@ describe('Config', () => {
     });
 
     it('tests custom_config', () => {
-      let providerConfig = config({provider: 'custom_config'});
+      const providerConfig = config({ provider: 'custom_config' });
       expect(providerConfig.id).to.equal('cc-mock-id');
       expect(providerConfig.secret).to.equal('cc-mock-secret');
       expect(providerConfig.redirect_uri).to.equal('https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/custom_config');
@@ -47,7 +52,7 @@ describe('Config', () => {
     });
 
     it('tests empty config', () => {
-      let providerConfig = config({});
+      const providerConfig = config({});
       expect(providerConfig.token_secret).to.equal('token-secret-123');
     });
   });

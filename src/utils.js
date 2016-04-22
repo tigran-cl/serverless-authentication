@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import decamelize from 'decamelize';
 
 /**
  * Utilities for Serverless Authentication
@@ -19,7 +20,7 @@ export class Utils {
    * @param params {object} url params
    */
   static urlBuilder(url, params) {
-    return url + '?' + this.urlParams(params);
+    return `${url}?${this.urlParams(params)}`;
   }
 
   /**
@@ -27,9 +28,11 @@ export class Utils {
    * @param params {object}
    */
   static urlParams(params) {
-    let result = [];
-    for (let key in params) {
-      result.push(`${key}=${params[key]}`);
+    const result = [];
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        result.push(`${decamelize(key)}=${params[key]}`);
+      }
     }
     return result.join('&');
   }
@@ -58,15 +61,18 @@ export class Utils {
    * @param config {redirect_client_uri {string}, token_secret {string}}
    * @param callback {function} callback function e.g. context.done
    */
-  static tokenResponse({payload, options, refresh}, {redirect_client_uri, token_secret}, callback) {
-    let params = {
+  static tokenResponse(
+    { payload, options, refresh },
+    { redirect_client_uri, token_secret },
+    callback) {
+    const params = {
       token: this.createToken(payload, token_secret, options)
     };
-    if(refresh) {
+    if (refresh) {
       params.refresh = refresh;
     }
-    let url = this.urlBuilder(redirect_client_uri, params);
-    return callback(null, {url: url});
+    const url = this.urlBuilder(redirect_client_uri, params);
+    return callback(null, { url });
   }
 
   /**
@@ -75,26 +81,27 @@ export class Utils {
    * @param config {redirect_client_uri {string}}
    * @param callback {function} callback function e.g. context.done
    */
-  static errorResponse(params, {redirect_client_uri}, callback) {
-    let url = this.urlBuilder(redirect_client_uri, params);
-    return callback(null, {url: url});
+  static errorResponse(params, { redirect_client_uri }, callback) {
+    const url = this.urlBuilder(redirect_client_uri, params);
+    return callback(null, { url });
   }
 
   /**
    * Generates Policy for AWS Api Gateway custom authorize
    * @param principalId {string} data for principalId field
    * @param effect {string} 'Allow' or 'Deny'
-   * @param resource {string} method arn e.g. event.methodArn (arn:aws:execute-api:<regionId>:<accountId>:<apiId>/<stage>/<method>/<resourcePath>)
+   * @param resource {string} method arn e.g. event.methodArn
+   *  (arn:aws:execute-api:<regionId>:<accountId>:<apiId>/<stage>/<method>/<resourcePath>)
    */
   static generatePolicy(principalId, effect, resource) {
-    let authResponse = {};
+    const authResponse = {};
     authResponse.principalId = principalId;
     if (effect && resource) {
-      let policyDocument = {};
+      const policyDocument = {};
       policyDocument.Version = '2012-10-17';
       policyDocument.Statement = [];
 
-      let statementOne = {};
+      const statementOne = {};
       statementOne.Action = 'execute-api:Invoke';
       statementOne.Effect = effect;
       statementOne.Resource = resource;

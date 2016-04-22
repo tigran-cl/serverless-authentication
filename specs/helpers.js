@@ -1,4 +1,9 @@
+'use strict';
+
 const chai = require('chai');
+const dirtyChai = require('dirty-chai');
+chai.use(dirtyChai);
+
 
 process.env.PROVIDER_FACEBOOK_ID = 'fb-mock-id';
 process.env.PROVIDER_FACEBOOK_SECRET = 'fb-mock-secret';

@@ -1,4 +1,4 @@
-import {Utils} from './utils';
+import { Utils } from './utils';
 import async from 'async';
 import request from 'request';
 
@@ -10,9 +10,9 @@ export class Provider {
     this.config = config;
   }
 
-  signin({signin_uri, scope, state, response_type}, callback) {
-    let {id, redirect_uri} = this.config;
-    let params = {
+  signin({ signin_uri, scope, state, response_type }, callback) {
+    const { id, redirect_uri } = this.config;
+    const params = {
       client_id: id,
       redirect_uri
     };
@@ -28,51 +28,56 @@ export class Provider {
     if (!params.client_id || !params.redirect_uri) {
       callback(`Invalid sign in params. ${params.client_id} ${params.redirect_uri}`);
     } else {
-      let url = Utils.urlBuilder(signin_uri, params);
-      callback(null, {url});
+      const url = Utils.urlBuilder(signin_uri, params);
+      callback(null, { url });
     }
   }
 
-  callback({code, state}, {authorization_uri, profile_uri, profileMap, authorizationMethod}, additionalParams, callback) {
-    let {authorization, profile} = additionalParams;
-    let {id, redirect_uri, secret, provider} = this.config;
+  callback({ code, state },
+    { authorization_uri,
+      profile_uri,
+      profileMap,
+      authorizationMethod },
+    additionalParams, cb) {
+    const { authorization, profile } = additionalParams;
+    const { id, redirect_uri, secret, provider } = this.config;
     async.waterfall([
       (callback) => {
-        let mandatoryParams = {
+        const mandatoryParams = {
           client_id: id,
           redirect_uri,
           client_secret: secret,
           code
         };
-        let payload = Object.assign(mandatoryParams, authorization);
+        const payload = Object.assign(mandatoryParams, authorization);
         if (authorizationMethod === 'GET') {
-          let url = Utils.urlBuilder(authorization_uri, payload);
+          const url = Utils.urlBuilder(authorization_uri, payload);
           request.get(url, callback);
         } else {
-          request.post(authorization_uri, {form: payload}, callback);
+          request.post(authorization_uri, { form: payload }, callback);
         }
       },
       (response, accessData, callback) => {
         if (!accessData) {
           callback('No access data');
         }
-        let {access_token} = JSON.parse(accessData);
-        let url = Utils.urlBuilder(profile_uri, Object.assign({access_token}, profile));
-        request.get(url, (error, response, profileData) => {
+        const { access_token } = JSON.parse(accessData);
+        const url = Utils.urlBuilder(profile_uri, Object.assign({ access_token }, profile));
+        request.get(url, (error, httpResponse, profileData) => {
           if (error) {
             callback(error);
           } else if (!profileData) {
             callback('No profile data');
           } else {
-            let profileJson = JSON.parse(profileData);
+            const profileJson = JSON.parse(profileData);
             profileJson.provider = provider;
-            let mappedProfile = profileMap ? profileMap(profileJson) : profileJson;
+            const mappedProfile = profileMap ? profileMap(profileJson) : profileJson;
             callback(null, mappedProfile);
           }
         });
       }
     ], (err, data) => {
-      callback(err, data, state);
+      cb(err, data, state);
     });
   }
 }
