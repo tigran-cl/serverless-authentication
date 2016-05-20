@@ -89,8 +89,8 @@ export class Provider {
     });
 
     attemptAuthorize()
-    .then(createMappedProfile)
-    .then((data) => cb(null, data, state))
-    .catch((error) => cb(error));
+      .then(createMappedProfile)
+      .then((data) => cb(null, data, state))
+      .catch((error) => cb(error));
   }
 }
