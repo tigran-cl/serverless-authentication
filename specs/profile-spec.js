@@ -32,10 +32,10 @@ describe('Profile', () => {
         preferred_username: 'Laardee',
         profile: 'https://fi.linkedin.com/in/eetutuomala',
         provider: 'facebook',
-        sub: null,
-        updated_at: null,
+        sub: 'sub',
+        updated_at: 1311280970,
         website: 'https://github.com/laardee',
-        zoneinfo: null,
+        zoneinfo: 'Europe/Helsinki',
         extra: 'extra'
       };
 
