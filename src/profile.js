@@ -45,8 +45,8 @@ export class Profile {
     ];
     this._raw = data;
     for (const field of fields) {
-      const value = data[field];
-      if (value) {
+      if (data.hasOwnProperty(field)) {
+        const value = data[field];
         if (field === 'address') {
           this.address = formatAddress(data.address);
         } else {
