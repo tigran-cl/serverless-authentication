@@ -43,13 +43,15 @@ export class Profile {
       'website',
       'zoneinfo'
     ];
-
+    this._raw = data;
     for (const field of fields) {
       const value = data[field];
-      if (field === 'address') {
-        this.address = formatAddress(data.address);
-      } else {
-        this[field] = value || null;
+      if (value) {
+        if (field === 'address') {
+          this.address = formatAddress(data.address);
+        } else {
+          this[field] = value || null;
+        }
       }
     }
   }
