@@ -21,6 +21,7 @@ export class Profile {
     const fields = [
       '_raw',
       'address',
+      'at_hash',
       'birthdate',
       'email_verified',
       'email',

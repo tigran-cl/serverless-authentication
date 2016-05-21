@@ -82,7 +82,7 @@ export class Provider {
         } else {
           const profileJson = JSON.parse(profileData);
           profileJson.provider = provider;
-          profileJson.access_token = access_token;
+          profileJson.at_hash = access_token;
           const mappedProfile = profileMap ? profileMap(profileJson) : profileJson;
           resolve(mappedProfile);
         }

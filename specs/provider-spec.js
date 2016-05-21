@@ -77,14 +77,10 @@ describe('Provider', () => {
       const providerConfig = config({ provider });
 
       const profileMap = (response) =>
-        new Profile({
-          id: response.id,
-          name: response.name,
+        new Profile(Object.assign(response, {
           email: response.email ? response.email.primary : null,
-          provider: response.provider,
-          picture: response.profileImage,
-          _raw: response
-        });
+          picture: response.profileImage
+        }));
 
       const options = {
         authorization_uri: 'https://auth.laardee.com/auth',
@@ -107,7 +103,7 @@ describe('Provider', () => {
           expect(profile.email).to.equal(expectedProfile.email);
           expect(profile.picture).to.equal(expectedProfile.picture);
           expect(profile.provider).to.equal(expectedProfile.provider);
-          expect(profile._raw.access_token).to.equal('access-token-123');
+          expect(profile.at_hash).to.equal('access-token-123');
           done(error);
         });
     });
