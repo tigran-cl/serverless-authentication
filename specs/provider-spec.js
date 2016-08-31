@@ -5,30 +5,31 @@ const Profile = require('../lib').Profile;
 const config = require('../lib').config;
 const nock = require('nock');
 const expect = require('chai').expect;
+const envVars = require('./envVars.json');
 
 describe('Provider', () => {
   describe('Signin', () => {
     it('should return facebook signin url', () => {
       const provider = 'facebook';
-      const providerConfig = config({ provider });
+      const providerConfig = config({ provider }, envVars);
       const options = { signin_uri: `https://auth.laardee.com/signin/${provider}`, scope: 'email', state: 'state-123' };
       (new Provider(providerConfig)).signin(options, (err, data) => {
-        expect(data.url).to.equal('https://auth.laardee.com/signin/facebook?client_id=fb-mock-id&redirect_uri=https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/facebook&scope=email&state=state-123');
+        expect(data.url).to.equal('https://auth.laardee.com/signin/facebook?client_id=fb-mock-id&redirect_uri=https://api-id.execute-api.eu-west-1.amazonaws.com/dev/authentication/callback/facebook&scope=email&state=state-123');
       });
     });
 
     it('should return custom signin url', () => {
       const provider = 'custom-config';
-      const providerConfig = config({ provider });
+      const providerConfig = config({ provider }, envVars);
       const options = { signin_uri: `https://auth.laardee.com/signin/${provider}`, scope: 'email', state: 'state-123' };
       (new Provider(providerConfig)).signin(options, (err, data) => {
-        expect(data.url).to.equal('https://auth.laardee.com/signin/custom-config?client_id=cc-mock-id&redirect_uri=https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/custom-config&scope=email&state=state-123');
+        expect(data.url).to.equal('https://auth.laardee.com/signin/custom-config?client_id=cc-mock-id&redirect_uri=https://api-id.execute-api.eu-west-1.amazonaws.com/dev/authentication/callback/custom-config&scope=email&state=state-123');
       });
     });
 
     it('should fail to return signin url', () => {
       const provider = 'crappyauth';
-      const providerConfig = config({ provider });
+      const providerConfig = config({ provider }, envVars);
       const options = { authorization_url: 'https://auth.laardee.com/signin/', scope: 'email', state: 'state-123' };
       (new Provider(providerConfig)).signin(options, (error) => {
         expect(error).not.to.be.null();
@@ -74,7 +75,7 @@ describe('Provider', () => {
       };
 
       const provider = 'facebook';
-      const providerConfig = config({ provider });
+      const providerConfig = config({ provider }, envVars);
 
       const profileMap = (response) =>
         new Profile(Object.assign(response, {
