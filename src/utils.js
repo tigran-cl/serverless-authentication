@@ -19,7 +19,7 @@ export class Utils {
    * @param url {string} url base
    * @param params {object} url params
    */
-  static urlBuilder(url, params) {
+  static urlBuilder(url='', params) {
     return `${url}?${this.urlParams(params)}`;
   }
 
