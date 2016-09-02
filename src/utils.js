@@ -10,7 +10,7 @@ export class Utils {
    * @param url {string} url base
    * @param provider {string} provider e.g. facebook
    */
-  static redirectUrlBuilder(url, provider) {
+  static redirectUrlBuilder(url='', provider) {
     return url.replace(/{provider}/g, provider);
   }
 
