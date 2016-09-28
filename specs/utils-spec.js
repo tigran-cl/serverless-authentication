@@ -28,7 +28,7 @@ describe('Utils', () => {
     it('should create new token', () => {
       const providerConfig = config('facebook', envVars);
       const token =
-        utils.createToken({ foo: 'bar' }, providerConfig.token_secret, { expiresIn: 1 });
+        utils.createToken({ foo: 'bar' }, providerConfig.tokenSecret, { expiresIn: 1 });
       expect(token).match(/[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+?$/g);
       expect(token.split('.')[0]).to.equal('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9');
     });
@@ -36,17 +36,17 @@ describe('Utils', () => {
 
   describe('Utils.readToken', () => {
     it('should read token', () => {
-      const token_secret = config({ provider: 'facebook' }, envVars).token_secret;
-      const token = utils.createToken({ foo: 'bar' }, token_secret, { expiresIn: 60 });
-      const data = utils.readToken(token, token_secret);
+      const tokenSecret = config({ provider: 'facebook' }, envVars).tokenSecret;
+      const token = utils.createToken({ foo: 'bar' }, tokenSecret, { expiresIn: 60 });
+      const data = utils.readToken(token, tokenSecret);
       expect(data.foo).to.equal('bar');
     });
 
     it('should fail to read expired token', () => {
-      const token_secret = config({ provider: 'facebook' }, envVars).token_secret;
-      const token = utils.createToken({ foo: 'bar' }, token_secret, { expiresIn: 0 });
+      const tokenSecret = config({ provider: 'facebook' }, envVars).tokenSecret;
+      const token = utils.createToken({ foo: 'bar' }, tokenSecret, { expiresIn: 0 });
       try {
-        utils.readToken(token, token_secret);
+        utils.readToken(token, tokenSecret);
       } catch (error) {
         expect(error.name).to.equal('TokenExpiredError');
         expect(error.message).to.equal('jwt expired');
@@ -56,7 +56,7 @@ describe('Utils', () => {
 
   describe('Utils.tokenResponse', () => {
     it('should return token response', () => {
-      const providerConfig = config({ provider: 'facebook' }, envVars);
+      const providerConfig = config({ provider: 'facebook', stage: 'dev' }, envVars);
       const authorizationToken = {
         payload: {
           id: 'bar'
@@ -76,7 +76,7 @@ describe('Utils', () => {
       const providerConfig = config({ provider: 'facebook' }, envVars);
       const id = 'bar';
       const time = (new Date()).getTime();
-      const hmac = crypto.createHmac('sha256', providerConfig.token_secret);
+      const hmac = crypto.createHmac('sha256', providerConfig.tokenSecret);
       hmac.update(`${id}-${time}`);
       const refreshToken = hmac.digest('hex');
       const authorizationToken = {
@@ -95,7 +95,7 @@ describe('Utils', () => {
 
   describe('Utils.errorResponse', () => {
     it('should return error response', () => {
-      const providerConfig = config({ provider: 'crappy-provider' }, envVars);
+      const providerConfig = config({ provider: 'crappy-provider', stage: 'dev' }, envVars);
       const params = { error: 'Invalid provider' };
       utils.errorResponse(params, providerConfig, (err, data) => {
         expect(data.url).to.equal('http://localhost:3000/auth/crappy-provider/?error=Invalid provider');

@@ -11,10 +11,10 @@ export class Provider {
   }
 
   signin({ signin_uri, scope, state, response_type }, callback) {
-    const { id, redirect_uri } = this.config;
+    const { id, redirectUri } = this.config;
     const params = {
       client_id: id,
-      redirect_uri
+      redirectUri
     };
     if (response_type) {
       params.response_type = response_type;
@@ -25,8 +25,8 @@ export class Provider {
     if (state) {
       params.state = state;
     }
-    if (!params.client_id || !params.redirect_uri) {
-      callback(`Invalid sign in params. ${params.client_id} ${params.redirect_uri}`);
+    if (!params.client_id || !params.redirectUri) {
+      callback(`Invalid sign in params. ${params.client_id} ${params.redirectUri}`);
     } else {
       const url = Utils.urlBuilder(signin_uri, params);
       callback(null, { url });

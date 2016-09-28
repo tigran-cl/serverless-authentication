@@ -61,10 +61,10 @@ export class Utils {
    * @param config {redirect_client_uri {string}, token_secret {string}}
    * @param callback {function} callback function e.g. context.done
    */
-  static tokenResponse(data, { redirect_client_uri, token_secret }, callback) {
+  static tokenResponse(data, { redirectClientUri, tokenSecret }, callback) {
     const { payload, options } = data.authorizationToken;
     const params = {
-      authorizationToken: this.createToken(payload, token_secret, options)
+      authorizationToken: this.createToken(payload, tokenSecret, options)
     };
 
     for (const key in data) {
@@ -75,7 +75,7 @@ export class Utils {
       }
     }
 
-    const url = this.urlBuilder(redirect_client_uri, params);
+    const url = this.urlBuilder(redirectClientUri, params);
     return callback(null, { url });
   }
 
@@ -85,8 +85,8 @@ export class Utils {
    * @param config {redirect_client_uri {string}}
    * @param callback {function} callback function e.g. context.done
    */
-  static errorResponse(params, { redirect_client_uri }, callback) {
-    const url = this.urlBuilder(redirect_client_uri, params);
+  static errorResponse(params, { redirectClientUri }, callback) {
+    const url = this.urlBuilder(redirectClientUri, params);
     return callback(null, { url });
   }
 

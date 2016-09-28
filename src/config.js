@@ -11,20 +11,16 @@ class Config {
     for (const key in envVars) {
       if (envVars.hasOwnProperty(key)) {
         const value = envVars[key];
-        const providerItem = (/PROVIDER_(.*)?_(.*)?/g).exec(key);
+        const providerItem = (/provider(.*)?(Id|Secret)/g).exec(key);
         if (providerItem) {
-          const provider = providerItem[1].toLowerCase();
+          const providerName = providerItem[1].toLowerCase();
           const type = providerItem[2].toLowerCase();
-          if (!this.providers[provider]) {
-            this.providers[provider] = {};
+          if (!this.providers[providerName]) {
+            this.providers[providerName] = {};
           }
-          this.providers[provider][type] = value;
-        } else if (key.toUpperCase() === 'REDIRECT_URI') {
-          this.redirect_uri = value;
-        } else if (key.toUpperCase() === 'REDIRECT_CLIENT_URI') {
-          this.redirect_client_uri = value;
-        } else if (key.toUpperCase() === 'TOKEN_SECRET') {
-          this.token_secret = value;
+          this.providers[providerName][type] = value;
+        } else {
+          this[key] = value;
         }
       }
     }
@@ -33,13 +29,13 @@ class Config {
   getConfig(provider) {
     let result = {};
     if (provider) {
-      const configProvider = provider.replace(/-/g, '_');
+      const configProvider = provider.replace(/_/g, '-');
       result = this.providers[configProvider] ? this.providers[configProvider] : {};
-      result.redirect_uri = Utils.redirectUrlBuilder(this.redirect_uri, provider);
-      result.redirect_client_uri = Utils.redirectUrlBuilder(this.redirect_client_uri, provider);
+      result.redirectUri = Utils.redirectUrlBuilder(this.redirectUri, provider);
+      result.redirectClientUri = Utils.redirectUrlBuilder(this.redirectClientUri, provider);
       result.provider = provider;
     }
-    result.token_secret = this.token_secret;
+    result.tokenSecret = this.tokenSecret;
     return result;
   }
 }
@@ -60,8 +56,8 @@ export function config(options, envVars) {
     stage = options.stage;
   }
 
-  if (!envVars.REDIRECT_URI) {
-    envVars.REDIRECT_URI = `https://${host}/${stage}/authentication/callback/{provider}`;
+  if (!envVars.redirectUri) {
+    envVars.redirectUri = `https://${host}/${stage}/authentication/callback/{provider}`;
   }
 
   return (new Config(envVars)).getConfig(provider);
