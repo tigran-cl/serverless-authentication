@@ -1,5 +1,5 @@
 import { Utils } from './utils';
-import Promise from 'any-promise';
+import Promise from 'bluebird';
 import request from 'request';
 
 /**
