@@ -10,7 +10,7 @@ export class Provider {
     this.config = config;
   }
 
-  signin({ signin_uri, scope, state, response_type }, callback) {
+  signin({ signin_uri, scope, state, response_type, access_type, prompt }, callback) {
     const { id, redirect_uri } = this.config;
     const params = {
       client_id: id,
@@ -24,6 +24,12 @@ export class Provider {
     }
     if (state) {
       params.state = state;
+    }
+    if (access_type) {
+      params.access_type = access_type;
+    }
+    if (prompt) {
+      params.prompt = prompt
     }
     if (!params.client_id || !params.redirect_uri) {
       callback(`Invalid sign in params. ${params.client_id} ${params.redirect_uri}`);
@@ -72,7 +78,7 @@ export class Provider {
       if (!accessData) {
         reject(new Error('No access data'));
       }
-      const { access_token } = JSON.parse(accessData);
+      const { access_token, refresh_token } = JSON.parse(accessData);
       const url = Utils.urlBuilder(profile_uri, Object.assign({ access_token }, profile));
       request.get(url, (error, httpResponse, profileData) => {
         if (error) {
@@ -83,6 +89,7 @@ export class Provider {
           const profileJson = JSON.parse(profileData);
           profileJson.provider = provider;
           profileJson.at_hash = access_token;
+          profileJson.offline_access = refresh_token ? refresh_token : '';
           const mappedProfile = profileMap ? profileMap(profileJson) : profileJson;
           resolve(mappedProfile);
         }
