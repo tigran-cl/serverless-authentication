@@ -29,7 +29,7 @@ export class Provider {
       params.access_type = access_type;
     }
     if (prompt) {
-      params.prompt = prompt
+      params.prompt = prompt;
     }
     if (!params.client_id || !params.redirect_uri) {
       callback(`Invalid sign in params. ${params.client_id} ${params.redirect_uri}`);
@@ -89,7 +89,7 @@ export class Provider {
           const profileJson = JSON.parse(profileData);
           profileJson.provider = provider;
           profileJson.at_hash = access_token;
-          profileJson.offline_access = refresh_token ? refresh_token : '';
+          profileJson.offline_access = refresh_token || '';
           const mappedProfile = profileMap ? profileMap(profileJson) : profileJson;
           resolve(mappedProfile);
         }
