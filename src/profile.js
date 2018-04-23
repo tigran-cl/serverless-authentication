@@ -1,4 +1,5 @@
 'use strict';
+
 /**
  * Profile class that normalizes profile data fetched from authentication provider
  */
@@ -13,7 +14,7 @@ function formatAddress(address) {
   return null;
 }
 
-export class Profile {
+class Profile {
   /**
    * @param data {object}
    */
@@ -44,9 +45,9 @@ export class Profile {
       'website',
       'zoneinfo'
     ];
-    this._raw = data;
-    for (const field of fields) {
-      if (data.hasOwnProperty(field)) {
+    this._raw = data; // eslint-disable-line no-underscore-dangle
+    fields.forEach((field) => {
+      if (Object.hasOwnProperty.call(data, field)) {
         const value = data[field];
         if (field === 'address') {
           this.address = formatAddress(data.address);
@@ -54,6 +55,10 @@ export class Profile {
           this[field] = value || null;
         }
       }
-    }
+    });
   }
 }
+
+module.exports = {
+  Profile,
+};

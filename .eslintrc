@@ -2,6 +2,7 @@
   "extends": "airbnb",
   "plugins": [],
   "rules": {
+    "import/no-extraneous-dependencies": "off",
     "func-names": "off",
     "comma-dangle": "off",
     "camelcase": "off",

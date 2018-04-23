@@ -1,9 +1,10 @@
 'use strict';
 
-const utils = require('../lib').utils;
-const config = require('../lib').config;
+const { expect } = require('chai');
 const crypto = require('crypto');
-const expect = require('chai').expect;
+const { utils } = require('../lib');
+const { config } = require('../lib');
+
 
 describe('Utils', () => {
   describe('Utils.redirectUrlBuilder', () => {
@@ -29,20 +30,20 @@ describe('Utils', () => {
       const token =
         utils.createToken({ foo: 'bar' }, providerConfig.token_secret, { expiresIn: 1 });
       expect(token).match(/[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+?$/g);
-      expect(token.split('.')[0]).to.equal('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9');
+      expect(token.split('.')[0]).to.equal('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
     });
   });
 
   describe('Utils.readToken', () => {
     it('should read token', () => {
-      const token_secret = config({ provider: 'facebook' }).token_secret;
+      const { token_secret } = config({ provider: 'facebook' });
       const token = utils.createToken({ foo: 'bar' }, token_secret, { expiresIn: 60 });
       const data = utils.readToken(token, token_secret);
       expect(data.foo).to.equal('bar');
     });
 
     it('should fail to read expired token', () => {
-      const token_secret = config({ provider: 'facebook' }).token_secret;
+      const { token_secret } = config({ provider: 'facebook' });
       const token = utils.createToken({ foo: 'bar' }, token_secret, { expiresIn: 0 });
       try {
         utils.readToken(token, token_secret);
@@ -64,9 +65,8 @@ describe('Utils', () => {
           expiresIn: 60
         }
       };
-      utils.tokenResponse({ authorizationToken }, providerConfig, (err, data) => {
-        expect(data.url).to.match(/http:\/\/localhost:3000\/auth\/facebook\/(\D)*[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+?$/);
-      });
+      expect(utils.tokenResponse({ authorizationToken }, providerConfig).url)
+        .to.match(/http:\/\/localhost:3000\/auth\/facebook\/(\D)*[a-zA-Z0-9-_]+?.[a-zA-Z0-9-_]+?.([a-zA-Z0-9-_]+)[a-zA-Z0-9-_]+?$/);
     });
   });
 
@@ -86,9 +86,8 @@ describe('Utils', () => {
           expiresIn: 15
         }
       };
-      utils.tokenResponse({ authorizationToken, refreshToken, id }, providerConfig, (err, data) => {
-        expect(data.url).to.match(/http:\/\/localhost:3000\/auth\/facebook\/\?authorization_token=[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?&refresh_token=[A-Fa-f0-9]{64}&id=.+$/);
-      });
+      expect( utils.tokenResponse({ authorizationToken, refreshToken, id }, providerConfig).url)
+        .to.match(/http:\/\/localhost:3000\/auth\/facebook\/\?authorization_token=[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+)?&refresh_token=[A-Fa-f0-9]{64}&id=.+$/);
     });
   });
 
@@ -96,9 +95,8 @@ describe('Utils', () => {
     it('should return error response', () => {
       const providerConfig = config({ provider: 'crappy-provider' });
       const params = { error: 'Invalid provider' };
-      utils.errorResponse(params, providerConfig, (err, data) => {
-        expect(data.url).to.equal('http://localhost:3000/auth/crappy-provider/?error=Invalid provider');
-      });
+      expect(utils.errorResponse(params, providerConfig).url)
+        .to.equal('http://localhost:3000/auth/crappy-provider/?error=Invalid provider');
     });
   });
 

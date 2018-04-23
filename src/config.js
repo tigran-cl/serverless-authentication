@@ -8,8 +8,8 @@ class Config {
   constructor() {
     const data = process.env;
     this.providers = {};
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
+    Object.keys(data).forEach((key) => {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
         const value = data[key];
         const providerItem = (/PROVIDER_(.*)?_(.*)?/g).exec(key);
         if (providerItem) {
@@ -27,7 +27,7 @@ class Config {
           this.token_secret = value;
         }
       }
-    }
+    });
   }
 
   getConfig(provider) {
@@ -47,22 +47,13 @@ class Config {
 /**
  * @param provider {string} oauth provider name e.g. facebook or google
  */
-export function config(options) {
-  let provider;
-  let host;
-  let stage;
-  // fallback -- remove on version upgrade
-  if (typeof (options) === 'string') {
-    provider = options;
-  } else {
-    provider = options.provider;
-    host = options.host;
-    stage = options.stage;
-  }
-
+function config({ provider, host, stage }) {
   if (!process.env.REDIRECT_URI) {
     process.env.REDIRECT_URI = `https://${host}/${stage}/authentication/callback/{provider}`;
   }
-
   return (new Config()).getConfig(provider);
 }
+
+module.exports = {
+  config,
+};

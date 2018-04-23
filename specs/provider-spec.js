@@ -1,10 +1,10 @@
 'use strict';
 
-const Provider = require('../lib').Provider;
-const Profile = require('../lib').Profile;
-const config = require('../lib').config;
 const nock = require('nock');
-const expect = require('chai').expect;
+const { expect } = require('chai');
+const { Provider } = require('../lib');
+const { Profile } = require('../lib');
+const { config } = require('../lib');
 
 describe('Provider', () => {
   describe('Signin', () => {
@@ -12,27 +12,29 @@ describe('Provider', () => {
       const provider = 'facebook';
       const providerConfig = config({ provider });
       const options = { signin_uri: `https://auth.laardee.com/signin/${provider}`, scope: 'email', state: 'state-123' };
-      (new Provider(providerConfig)).signin(options, (err, data) => {
-        expect(data.url).to.equal('https://auth.laardee.com/signin/facebook?client_id=fb-mock-id&redirect_uri=https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/facebook&scope=email&state=state-123');
-      });
+      return (new Provider(providerConfig)).signin(options)
+        .then(data =>
+          expect(data.url).to.equal('https://auth.laardee.com/signin/facebook?client_id=fb-mock-id&redirect_uri=https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/facebook&scope=email&state=state-123'));
     });
 
     it('should return custom signin url', () => {
       const provider = 'custom-config';
       const providerConfig = config({ provider });
       const options = { signin_uri: `https://auth.laardee.com/signin/${provider}`, scope: 'email', state: 'state-123' };
-      (new Provider(providerConfig)).signin(options, (err, data) => {
-        expect(data.url).to.equal('https://auth.laardee.com/signin/custom-config?client_id=cc-mock-id&redirect_uri=https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/custom-config&scope=email&state=state-123');
-      });
+      return (new Provider(providerConfig)).signin(options)
+        .then((data) => {
+          expect(data.url).to.equal('https://auth.laardee.com/signin/custom-config?client_id=cc-mock-id&redirect_uri=https://test-api-id.execute-api.eu-west-1.amazonaws.com/prod/authentication/callback/custom-config&scope=email&state=state-123');
+        });
     });
 
     it('should fail to return signin url', () => {
       const provider = 'crappyauth';
       const providerConfig = config({ provider });
       const options = { authorization_url: 'https://auth.laardee.com/signin/', scope: 'email', state: 'state-123' };
-      (new Provider(providerConfig)).signin(options, (error) => {
-        expect(error).not.to.be.null();
-      });
+      return (new Provider(providerConfig)).signin(options)
+        .catch((error) => {
+          expect(error).not.to.be.null();
+        });
     });
   });
 
@@ -57,7 +59,7 @@ describe('Provider', () => {
         });
     });
 
-    it('should return profile', (done) => {
+    it('should return profile', () => {
       const expectedProfile = {
         id: '1',
         name: 'Eetu Tuomala',
@@ -76,7 +78,7 @@ describe('Provider', () => {
       const provider = 'facebook';
       const providerConfig = config({ provider });
 
-      const profileMap = (response) =>
+      const profileMap = response =>
         new Profile(Object.assign(response, {
           email: response.email ? response.email.primary : null,
           picture: response.profileImage
@@ -92,19 +94,21 @@ describe('Provider', () => {
         grant_type: 'authorization_code'
       };
 
-      (new Provider(providerConfig)).callback({
-        code: 'abcde',
-        state: 'state-123' },
+      return (new Provider(providerConfig)).callback(
+        {
+          code: 'abcde',
+          state: 'state-123'
+        },
         options,
-        additionalParams,
-        (error, profile) => {
+        additionalParams
+      )
+        .then((profile) => {
           expect(profile.id).to.equal(expectedProfile.id);
           expect(profile.name).to.equal(expectedProfile.name);
           expect(profile.email).to.equal(expectedProfile.email);
           expect(profile.picture).to.equal(expectedProfile.picture);
           expect(profile.provider).to.equal(expectedProfile.provider);
-          expect(profile.at_hash).to.equal('access-token-123');
-          done(error);
+          return expect(profile.at_hash).to.equal('access-token-123');
         });
     });
   });

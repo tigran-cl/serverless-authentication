@@ -1,8 +1,8 @@
 'use strict';
 
-const Profile = require('../lib').Profile;
 const _ = require('lodash');
-const expect = require('chai').expect;
+const { expect } = require('chai');
+const { Profile } = require('../lib');
 
 describe('Profile', () => {
   describe('create a new Profile', () => {
@@ -49,7 +49,7 @@ describe('Profile', () => {
       expect(profile.provider).to.equal('facebook');
       expect(profile.address.formatted).to.equal('Urho Kekkosen Katu 7B\n00100 Helsinki\nFinland');
       expect(profile).not.to.have.property('extra');
-      expect(profile._raw).to.have.property('extra');
+      expect(profile._raw).to.have.property('extra'); // eslint-disable-line no-underscore-dangle
     });
   });
 });

@@ -4,7 +4,7 @@ import decamelize from 'decamelize';
 /**
  * Utilities for Serverless Authentication
  */
-export class Utils {
+class Utils {
   /**
    * Creates redirectUrl
    * @param url {string} url base
@@ -28,12 +28,9 @@ export class Utils {
    * @param params {object}
    */
   static urlParams(params) {
-    const result = [];
-    for (const key in params) {
-      if (params.hasOwnProperty(key)) {
-        result.push(`${decamelize(key)}=${params[key]}`);
-      }
-    }
+    const result =
+      Object.keys(params).map(key =>
+        `${decamelize(key)}=${params[key]}`);
     return result.join('&');
   }
 
@@ -59,35 +56,23 @@ export class Utils {
    * Creates token response and triggers callback
    * @param data {payload: object, options: object}
    * @param config {redirect_client_uri {string}, token_secret {string}}
-   * @param callback {function} callback function e.g. context.done
    */
-  static tokenResponse(data, { redirect_client_uri, token_secret }, callback) {
+  static tokenResponse(data, { redirect_client_uri, token_secret }) {
     const { payload, options } = data.authorizationToken;
-    const params = {
-      authorizationToken: this.createToken(payload, token_secret, options)
-    };
-
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        if (key !== 'authorizationToken') {
-          params[key] = data[key];
-        }
-      }
-    }
-
-    const url = this.urlBuilder(redirect_client_uri, params);
-    return callback(null, { url });
+    const params =
+      Object.assign({}, data, {
+        authorizationToken: this.createToken(payload, token_secret, options)
+      });
+    return { url: this.urlBuilder(redirect_client_uri, params) };
   }
 
   /**
    * Creates error response and triggers callback
    * @param params
    * @param config {redirect_client_uri {string}}
-   * @param callback {function} callback function e.g. context.done
    */
-  static errorResponse(params, { redirect_client_uri }, callback) {
-    const url = this.urlBuilder(redirect_client_uri, params);
-    return callback(null, { url });
+  static errorResponse(params, { redirect_client_uri }) {
+    return { url: this.urlBuilder(redirect_client_uri, params) };
   }
 
   /**
@@ -115,3 +100,7 @@ export class Utils {
     return authResponse;
   }
 }
+
+module.exports = {
+  Utils,
+};

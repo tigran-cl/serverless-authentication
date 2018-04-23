@@ -1,20 +1,12 @@
 'use strict';
 
-const config = require('../lib').config;
-const expect = require('chai').expect;
+const { config } = require('../lib');
+const { expect } = require('chai');
 
 describe('Config', () => {
   describe('create a new Config', () => {
     it('tests facebook config', () => {
       const providerConfig = config({ provider: 'facebook' });
-      expect(providerConfig.id).to.equal('fb-mock-id');
-      expect(providerConfig.secret).to.equal('fb-mock-secret');
-      expect(providerConfig.redirect_uri).to.equal('https://api-id.execute-api.eu-west-1.amazonaws.com/dev/authentication/callback/facebook');
-      expect(providerConfig.redirect_client_uri).to.equal('http://localhost:3000/auth/facebook/');
-    });
-
-    it('tests facebook config with fallback string provider', () => {
-      const providerConfig = config('facebook');
       expect(providerConfig.id).to.equal('fb-mock-id');
       expect(providerConfig.secret).to.equal('fb-mock-secret');
       expect(providerConfig.redirect_uri).to.equal('https://api-id.execute-api.eu-west-1.amazonaws.com/dev/authentication/callback/facebook');
