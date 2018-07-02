@@ -1,10 +1,13 @@
 {
-  "name": "serverless-authentication",
+  "name": "serverless-authentication-tigran-cl",
   "version": "0.5.0",
   "main": "lib/index.js",
   "license": "MIT",
   "private": false,
   "author": "Eetu Tuomala <eetu.tuomala@sc5.io>",
+  "contributors": [
+    "Tigran Mnatsakanyan"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/laardee/serverless-authentication"
