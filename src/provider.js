@@ -79,8 +79,7 @@ export class Provider {
         reject(new Error('No access data'));
       }
       const { access_token, refresh_token } = JSON.parse(accessData);
-      const url = Utils.urlBuilder(profile_uri, Object.assign({ access_token }, profile));
-      request.get(url, (error, httpResponse, profileData) => {
+      request.get({url: profile_uri, headers: {Authorization: 'Bearer ' + access_token}}, (error, httpResponse, profileData) => {
         if (error) {
           reject(error);
         } else if (!profileData) {
