@@ -62,9 +62,8 @@ export class Utils {
    * @param callback {function} callback function e.g. context.done
    */
   static tokenResponse(data, { redirect_client_uri, token_secret }, callback) {
-    const { payload, options } = data.authorizationToken;
     const params = {
-      authorizationToken: this.createToken(payload, token_secret, options)
+      authorizationToken: data.authorizationToken
     };
 
     for (const key in data) {
