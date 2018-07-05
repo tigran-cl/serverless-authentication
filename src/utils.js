@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import decamelize from 'decamelize';
+import njwt from 'njwt';
 
 /**
  * Utilities for Serverless Authentication
@@ -52,7 +53,7 @@ export class Utils {
    * @param config {object} with token_secret --> change to secret
    */
   static readToken(token, secret, options) {
-    return jwt.verify(token, secret, options);
+    return njwt.verify(token, secret, 'RS256');
   }
 
   /**
@@ -63,7 +64,7 @@ export class Utils {
    */
   static tokenResponse(data, { redirect_client_uri, token_secret }, callback) {
     const params = {
-      authorizationToken: data.authorizationToken
+      authorizationToken: this.base64url(data.authorizationToken)
     };
 
     for (const key in data) {
@@ -112,5 +113,17 @@ export class Utils {
       authResponse.policyDocument = policyDocument;
     }
     return authResponse;
+  }
+
+  static base64url(source) {
+  
+    // Remove padding equal characters
+    // var encodedSource = source.replace(/=+$/, '');
+  
+    // Replace characters according to base64url specifications
+    var encodedSource = source.replace(/\+/g, '-');
+    encodedSource = encodedSource.replace(/\//g, '_');
+  
+    return encodedSource;
   }
 }
